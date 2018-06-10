@@ -341,8 +341,6 @@ session_start(); // en début de chaque fichier utilisant $_SESSION
 					    // envoi de l'e-mail :
 						if( mail(MAIL_DEST_PHARMA, $objet, $message, $header) ){
 
-							mail(MAIL_DEST_CLR, $objet, $message, $header);
-
 							echo "<div class='cArtiMessageConfirm'>";
 							echo "<style type='text/css'> h3 { display: none } </style>"; // pour effacer le titre de la page : "Préparation ..."
 							echo "<p>Merci, votre commande a bien été envoyée.</p>";

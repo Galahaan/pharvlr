@@ -177,7 +177,7 @@ session_start(); // en début de chaque fichier utilisant $_SESSION
 				vous avez moins d'une minute à pied.</p>
 
 			<p><b>En cas de garde</b>, la pharmacie reste ouverte jusqu'à <b>20h30</b>.</p>
-			<p>Après 20h30, s'adresser au <b>commissariat</b> Waldeck-Rousseau au <b><a href='tel:+33253467000'>02 53 46 70 00</a></b>.</p>
+			<p>Après 20h30, il faut se rendre au <b>commissariat</b> Waldeck-Rousseau.</p>
 
 		</section>
 	</main>

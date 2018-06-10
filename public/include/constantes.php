@@ -1,38 +1,43 @@
 <?php
 
-	//////////////////////////////////////////////////////////////////////////////////////////
-	///////////////                                                            ///////////////
-	///////////////                Coordonnées de la pharmacie                 ///////////////
-	///////////////                                                            ///////////////
-	//////////////////////////////////////////////////////////////////////////////////////////
+// code de validation, pour pouvoir utiliser, grâce à un compte Google, ses outils de suivi de référencement
+// (à garder de façon permanente tant qu'on utilise les outils)
+define("GOOGLE_VALIDATION_CODE", "mhjYrgfrE7d0TraYlzb7il--H1UDZpC47s1hw92GePw");
 
-	// Nom de la pharmacie
-	define("NOM_PHARMA", "Pharmacie Le Reste");
-	define("STI_PHARMA", "Nantes, quartier Saint-Joseph de Porterie");
 
-	// Adresse de la pharmacie
-	define("ADR_PHARMA_L1", "21 rue du Bêle");
-	define("ADR_PHARMA_L2", "");
-	define("CP_PHARMA",     "44300");
-	define("VIL_PHARMA",    "Nantes");
+//////////////////////////////////////////////////////////////////////////////////////////
+///////////////                                                            ///////////////
+///////////////                Coordonnées de la pharmacie                 ///////////////
+///////////////                                                            ///////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
-	// Tel, fax, mail, facebook, google+
-	define("TEL_PHARMA_DECO", "02 40 25 15 80");
-	define("TEL_PHARMA_UTIL", "+33240251580");
-	define("FAX_PHARMA_DECO", "02 40 30 06 56");
-	define("ADR_MAIL_PHARMA", "contact@pharmacielereste.fr");
-	define("ADR_FB_PHARMA",   "https://www.facebook.com/Pharmacie-Le-Reste-700447003388902");
-	define("ADR_GG_PHARMA",   "https://plus.google.com/113407799173132476603/about");
+// Nom de la pharmacie
+define("NOM_PHARMA", "Pharmacie Le Reste");
+define("STI_PHARMA", "Saint-Joseph de Porterie, Nantes");
+
+// Adresse de la pharmacie
+define("ADR_PHARMA_L1"     , "21 rue du Bêle");
+define("ADR_PHARMA_L2"     , "");
+define("CP_PHARMA"         , "44300");
+define("VIL_PHARMA"        , "Nantes");
+
+// Tel, fax, mail, facebook, google+
+define("TEL_PHARMA_DECO"   , "02 40 25 15 80");
+define("TEL_PHARMA_UTIL"   , "+33240251580");
+define("FAX_PHARMA_DECO"   , "02 40 30 06 56");
+define("ADR_MAIL_PHARMA"   , "contact@pharmacielereste.fr");
+define("ADR_FB_PHARMA"     , "https://www.facebook.com/Pharmacie-Le-Reste-700447003388902");
+define("ADR_GG_PHARMA"     , "https://plus.google.com/113407799173132476603/about");
 
 	// Mots-clés pour le référencement
-	define("MC_NOM_PHARMA", "le reste");
-	define("MC_QUARTIER",   "saint-joseph-de-porterie");
-	define("MC_CP",         "44300");
-	define("MC_1",          "joseph");
-	define("MC_2",          "porterie");
+define("MC_NOM_PHARMA"     , "Le Reste");
+define("MC_QUARTIER"       , "Saint-Joseph de Porterie");
+define("MC_1"              , "44300");
+define("MC_2"              , "Beaujoire");
+define("MC_3"              , "stade");
 
-	// 'home' du site sur le serveur de l'hébergeur (functions.php)
-	define("HOME", "/home/pharmacihc/"); // utilisé uniquement dans require_onceCLR qui n'est utilisée nulle part !
+// 'home' du site sur le serveur de l'hébergeur (functions.php)
+define("HOME", "/home/pharmacihc/"); // utilisé uniquement dans require_onceCLR qui n'est utilisée nulle part !
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	///////////////                                                            ///////////////
@@ -74,13 +79,13 @@
 	define("SW_ADRESSE_SITE_PHARMACIE", "https://www.pharmacielereste.fr/");
 
 	// adresse mail de la pharmacie :
-	define("MAIL_DEST_PHARMA", "phcie.lereste@perso.alliadis.net");
+	define("MAIL_DEST_PHARMA", "clr.tstph@use.startmail.com");
 
 	// pour vérifier les 1ers mails officiels :
-	define("MAIL_DEST_CLR",    "clr.tstph@use.startmail.com");
+//	define("MAIL_DEST_CLR",    "clr.tstph@use.startmail.com");
 
-	// taille max de la pièce jointe : 2 Mo = 2097152 octets
-	define("TAILLE_MAX_PJ", 2097152);
+	// taille max de la pièce jointe : 5 Mo = 5242880 octets
+	define("TAILLE_MAX_PJ", 5242880);
 
 	// extensions autorisées pour la pièce jointe : cf aussi ligne : " switch ($extension) " en ligne 177 de prepaCommande
 	define("LISTE_EXT_AUTORISEES", '".jpe, .jpg, .jpeg, .png, .gif, .pdf"');

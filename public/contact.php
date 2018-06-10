@@ -331,8 +331,6 @@ session_start(); // en début de chaque fichier utilisant $_SESSION
 				    // envoi de l'e-mail :
 					if( mail(MAIL_DEST_PHARMA, $objet, $message, $header) ){
 	
-						mail(MAIL_DEST_CLR, $objet, $message, $header);
-	
 						echo "<article class='cArtiMessageConfirm'>";
 						echo "<p>Merci, votre message a bien été envoyé.</p>";
 						echo "<p>Nous vous répondrons dans les meilleurs délais, sous

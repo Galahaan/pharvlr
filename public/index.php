@@ -45,8 +45,14 @@
 <!DOCTYPE html>
 <html lang='fr'>
 <head>
-	<title><?= NOM_PHARMA ?></title>
 	<meta charset='utf-8'>
+
+    <?php // Cette balise sert à dire à Google : "je suis le propriétaire du site, et je souhaite utiliser,        ?>
+    <?php // par l'intermédiaire de mon compte Google, les outils de suivi de référencement proposés par Google."  ?>
+    <?php // Cette balise DOIT être conservée de façon permanente tant que l'on souhaite utiliser ces outils.      ?>
+    <meta name="google-site-verification" content="<?= GOOGLE_VALIDATION_CODE ?>" />
+
+	<title><?= NOM_PHARMA ?></title>
 
 	<!-- Mots clés de la page -->
 	<meta name='keywords' content='pharmacie, <?= MC_NOM_PHARMA ?>, <?= MC_QUARTIER ?>, <?= MC_CP ?>, <?= MC_1 ?>, <?= MC_2 ?>'>
