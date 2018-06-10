@@ -1,0 +1,83 @@
+#
+# Redirection http -> https
+#
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+
+#
+# Définition de l'index par défaut à charger, ou, si non trouvé, de la page à afficher à la place
+#
+# DirectoryIndex index.php /erreurs/erreur-index.php
+#
+# Le pb, c'est que, dans le cas où j'essaie d'accéder à /img ou /css, c'est cette erreur-index qui est affichée à la place de la 403.
+# Alors que si j'essaie d'accéder à /inclus, j'ai bien l'erreur 403.
+# Il est vrai que le .htaccess de img et css est un 'Options -Indexes' alors que celui de inclus est un 'deny from all',
+# mais c'est quand même une erreur 403 qui est levée dans tous les cas ... je ne comprends pas !
+# Pour remédier au pb, j'ai trouvé qu'il fallait écrire le chemin complet :
+#
+DirectoryIndex index.php https://www.bigouig.fr/erreurs/erreur-index.php
+
+
+#
+# En cas d'absence de fichier 'index.html', pour empêcher l'affichage du contenu du répertoire :
+# (si je mets un "deny from all", c'est trop puissant et le site ne fonctionne plus :/   )
+#
+Options -Indexes
+
+
+#
+# Pages d'erreurs personnalisées
+#
+# Pour l'instant ça fonctionne, mais, comme pour le DirectoryIndex ci-dessus,
+# si jamais on rencontre des problèmes, il suffira peut-être d'écrire le chemin complet, au lieu du relatif :
+# ErrorDocument 401 https://www.bigouig.fr/erreurs/erreur-401.php
+#
+ErrorDocument 401 /erreurs/erreur-401.php
+ErrorDocument 403 /erreurs/erreur-403.php
+ErrorDocument 404 /erreurs/erreur-404.php
+ErrorDocument 500 /erreurs/erreur-500.php
+
+
+#
+# Ici c'est juste de l'optimisation.
+# Mise en cache dans le navigateur : délais de rafraîchissements
+# (après le tout 1er chargement de la page par le navigateur, les éléments ci-dessous
+#  ne seront rechargés par le navigateur qu'une fois que le délai indiqué pour chacun d'eux sera expiré)
+# => cela permet donc une navigation plus rapide puisque certains éléments de la page sont pris dans le
+# cache du navigateur (en local), et non depuis le serveur.
+#
+<IfModule mod_expires.c>
+# Le fichier html
+ExpiresByType text/html                 "access plus 0 seconds"
+# Les données
+ExpiresByType text/xml                  "access plus 0 seconds"
+ExpiresByType application/xml           "access plus 0 seconds"
+ExpiresByType application/json          "access plus 0 seconds"
+# Les flux (feed ?)
+ExpiresByType application/rss+xml       "access plus 1 hour"
+ExpiresByType application/atom+xml      "access plus 1 hour"
+# Favicon (ne peut pas être renommé)
+ExpiresByType image/x-icon              "access plus 1 week"
+# Medias: images, video, audio
+ExpiresByType image/gif                 "access plus 1 week"
+ExpiresByType image/png                 "access plus 1 week"
+ExpiresByType image/jpeg                "access plus 1 week"
+ExpiresByType image/jpg                "access plus 1 week"
+ExpiresByType video/ogg                 "access plus 1 week"
+ExpiresByType audio/ogg                 "access plus 1 week"
+ExpiresByType video/mp4                 "access plus 1 week"
+ExpiresByType video/webm                "access plus 1 week"
+# fichiers HTC (css3pie)
+ExpiresByType text/x-component          "access plus 1 week"
+# Webfonts
+ExpiresByType application/x-font-ttf    "access plus 1 week"
+ExpiresByType font/opentype             "access plus 1 week"
+ExpiresByType application/x-font-woff   "access plus 1 week"
+ExpiresByType image/svg+xml             "access plus 1 week"
+ExpiresByType application/vnd.ms-fontobject "access plus 1 week"
+# CSS and JavaScript
+ExpiresByType text/css                  "access plus 1 week"
+ExpiresByType application/javascript    "access plus 1 week"
+</IfModule>

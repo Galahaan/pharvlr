@@ -1,6 +1,6 @@
 <?php
 
-include('inclus/entete.php');
+include('inclus/enteteCap.php');
 
 // Pour des raisons de sécurité, dans le cas de l'envoi d'un mail, je teste si la page
 // courante n'a pas été usurpée; je suis donc, das ce cas, obligé de l'écrire EN DUR :
@@ -51,6 +51,20 @@ if( isset($_POST['bouton']) ){
 	}
 	// on se donne une version du message en format HTML (plus sympa à lire pour la pharmacie)
 	$messageClientHtml = "<b style='font-size: 16px;'>" . nl2br($messageClientTxt) . "</b>";
+
+    //  ********  CAPTCHA  ********
+    if( isset($_POST['g-recaptcha-response']) ){
+        $reponseCaptcha = testCaptcha( $_POST['g-recaptcha-response'] );
+        print_r($reponseCaptcha);
+    }
+    else{
+        print_r("<br><br>captcha non demandé ...<br><br>");
+    }
+    if( isset($reponseCaptcha) ){
+        if( $reponseCaptcha['success'] == false ){
+            $erreurs['captcha'] = "<br><br>Captcha invalide ...<br><br>";
+        }
+    }
 }
 ?>
 	<main id='iMain'>
@@ -74,8 +88,7 @@ if( isset($_POST['bouton']) ){
 			<p id='iContactTel'><a href='tel:<?= TEL_PHARMA_UTIL ?>'><i class='fa fa-phone' aria-hidden='true'></i><?= TEL_PHARMA_DECO ?></a>&nbsp;<img class='cClicIndexTaille' src='img/icones/clicIndex.png' alt=''></p>
 			<p><i class='fa fa-fax' aria-hidden='true'></i><?= FAX_PHARMA_DECO ?></p>
 			<p id='iContactMail'><a href='mailto:<?= ADR_MAIL_PHARMA ?>'><i class='fa fa-envelope' aria-hidden='true'></i><?= ADR_MAIL_PHARMA ?></a></p>
-			<?php
-/*			<p>
+			<p>
 				<a href='<?= ADR_FB_PHARMA ?>'>
 					<img class='cFaceGool' src='img/icones/fb.png' alt='facebook'>
 					<img class='cFaceGool cCouleurNoire' src='img/icones/fb_n.jpg' alt='facebook'>
@@ -87,7 +100,6 @@ if( isset($_POST['bouton']) ){
 					<img class='cFaceGool cCouleurNoire' src='img/icones/gg_n.jpg' alt='google+'>
 				</a>
 			</p>
-*/			?>
 		</section>
 
 		<section id='iContactPlan' class='cSectionContour'><h2>Se rendre sur place ...</h2>
@@ -326,7 +338,10 @@ if( isset($_POST['bouton']) ){
 			?>
 
 			<sup>Veuillez renseigner tous les champs ci-dessous svp.</sup>
-			<form method='POST'>
+
+			<?php if( isset($erreurs['captcha']) ) { echo "<p class='errCpatcha'>" . $erreurs['captcha'] . "</p>"; } ?>
+
+			<form id='goocapt' action='?' method='post'>
 				<div class='cChampForm'>
 					<input type='radio' id='iCiviliteMme'  name='civilite' value='Mme'  required
 						<?= $civilite == "Mme"  ? "checked" : ""?> >
@@ -373,7 +388,7 @@ if( isset($_POST['bouton']) ){
 				</div>
 				<div class='cChampForm'>
 					<label for='iMessageTextarea'>Message</label>
-						<textarea rows='4' minlength='<?= NB_CAR_MIN_MESSAGE_HTM ?>' maxlength='<?= NB_CAR_MAX_MESSAGE_HTM ?>' id='iMessageTextarea' name='message' required placeholder='>'
+						<textarea rows='4' minlength='<?= NB_CAR_MIN_MESSAGE_HTM ?>' maxlength='<?= NB_CAR_MAX_MESSAGE_HTM ?>' id='iMessageTextarea' name='message' required
 							<?php	if( isset($erreurs['message']) && $focusErreurMis == false ){
 										echo " autofocus";
 										$focusErreurMis = true;
@@ -383,7 +398,7 @@ if( isset($_POST['bouton']) ){
 					<?php if( isset($erreurs['message']) ) { echo "<sub>" . $erreurs['message'] . "</sub>"; } ?>
 				</div>
 				<div class='cBoutonOk'>
-					<button name='bouton'>Envoyer</button>
+					<button class='g-recaptcha' data-sitekey='6LcPQyUUAAAAAPTt3tR1KVuHoq9XVMs-74gHSOxY' data-callback='onSubmit' name='bouton'>Envoyer</button>
 				</div>
 			</form>
 		<?php endif ?>

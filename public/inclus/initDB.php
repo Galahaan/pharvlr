@@ -1,7 +1,5 @@
 <?php
 
-require_once("constantes.php");
-
 try {
 	$db_options = array(
 		PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", // On force l'encodage en utf8

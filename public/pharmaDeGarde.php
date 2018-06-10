@@ -1,88 +1,54 @@
 <?php
 
-session_start(); // en début de chaque fichier utilisant $_SESSION
-require_once("include/constantes.php");
+include('inclus/entete.php');
 
 ?>
-<!DOCTYPE html>
-<html lang='fr'>
-<head>
-	<title><?= NOM_PHARMA ?></title>
-	<meta charset='utf-8'>
-	<meta name='keywords' content='pharmacie, <?= MC_NOM_PHARMA ?>, <?= MC_QUARTIER ?>, <?= MC_CP ?>, <?= MC_1 ?>, <?= MC_2 ?>'>
-	<meta name='viewport' content='width=device-width, initial-scale=1'>
-	<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel='stylesheet' integrity='sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1' crossorigin='anonymous'>
-	<link rel='stylesheet' type='text/css' href='css/style.css'>
-	<link rel='shortcut icon' href='img/favicon.ico'>
-</head>
+	<main id='iMain'>
+		<?php $heure = heureActuelle('d'); ?>
 
-<body>
-	<header>
-		<section>
-			<a href='index.php'>
-				<img src='img/croix_mauve.png' alt=''>
-				<h1><?= NOM_PHARMA ?></h1>
-				<h2><?= STI_PHARMA ?></h2>
-			</a>
-			<p id='iTelIndex'><i class='fa fa-volume-control-phone' aria-hidden='true'></i>&nbsp;&nbsp;<a href='tel:<?= TEL_PHARMA_UTIL ?>'><?= TEL_PHARMA_DECO ?></a></p>
-		</section>
-		<nav class='cNavigation'>
-			<ul>
-				<li><a href='index.php'   >Accueil </a></li>
-				<li><a href='horaires.php'>Horaires</a></li>
-				<li><a href='equipe.php'  >Équipe  </a></li>
-				<li><a href='contact.php' >Contact </a></li>
-			</ul>
-		</nav>
-		<div class='cBandeauConnex'>
-			<?php
-				if( isset($_SESSION['client']) ){
+		<section id='iPdG3237' class='cSectionContour'>
 
-					// si le client est connecté, on affiche son nom et le lien pour se déconnecter :
-					echo "<div class='cClientConnecte'>";
-						echo $_SESSION['client']['prenom'] . " " . $_SESSION['client']['nom'];
-					echo "</div>";
-
-					echo "<div class='cLienConnex'>";
-						echo "<a href='deconnexion.php'>déconnexion</a>";
-					echo "</div>";
-				}
-				else{
-
-					// si le client n'est pas connecté, on affiche le lien pour se connecter :
-					echo "<div class='cClientConnecte'>";
-						echo " ";
-					echo "</div>";
-
-					echo "<div class='cLienConnex'>";
-						echo "<a href='connexion.php'>connexion</a>";
-					echo "</div>";
-				}
-			?>
-		</div>
-	</header>
-
-	<main>
-		<section class='cPharmaDeGarde'>
-
-			<p>Trouvez la pharmacie de garde la plus proche de chez vous
-				<a href="http://www.3237.fr/"> en cliquant ici ...</a>
+		<?php // si les gardes fonctionnent sans passer par le commissariat, ou si on est dans la journée : ?>
+		<?php if( (HEURE_SOIR_POLICE_D == "X") || ((HEURE_MATIN_POLICE_D <= $heure) && ($heure < HEURE_SOIR_POLICE_D)) ) : ?>
+			<p  class='cIL'>Trouvez la&nbsp;</p>
+			<h2 class='cIL' id='iPdGh21'>pharmacie de garde</h2>
+			<p  class='cIL'>&nbsp;la plus proche de chez vous en cliquant sur la croix ci-dessous :</p>
+			<p id='iPdGcroix'>
+				<a href='http://www.3237.fr/'>
+					<img src='img/icones/croix_garde.png' alt=''>
+					<span class='cBraille'>croix</span>
+				</a>
 			</p>
+		<?php else : // on est en horaires de garde -> on affiche juste le titre ?>
+			<h2 id='iPdGh22'>Pharmacie de garde</h2>
+		<?php endif ?>
+
+		</section>
+
+		<section id='iPdGplan' class='cSectionContour'>
+
+			<?php // pour Lynx, on enlève le h2 ?>
+			<?php if( strpos($_SERVER['HTTP_USER_AGENT'], 'ynx') == FALSE ) : ?>
+			<h2>Localiser le commissariat de police</h2>
+			<?php endif ?>
+
+		<?php // si les gardes fonctionnent sans passer par le commissariat, il n'y a RIEN d'autre à afficher ?>
+		<?php if( HEURE_SOIR_POLICE_D != "X" ) : ?>
+			<?php // quelle que soit l'heure, on informe les gens du fonctionnement en horaires de garde, et on propose le plan : ?>
+			<p>À partir de <span><?= HEURE_SOIR_POLICE_H ?></span>, et jusqu'à <span><?= HEURE_MATIN_POLICE_H ?></span> le lendemain matin, il faut se rendre, avec une pièce d'<span>identité</span> et une <span>ordonnance</span>, au <span>commissariat de police</span> situé :</p>
+			<p><?= ADRESSE_POLICE ?></p>
+			<p>Si vous utilisez un smartphone, profitez de son GPS pour vous y rendre :</p>
+			<p>- activez la localisation</p>
+			<p>- cliquez sur le plan ci-dessous</p>
+			<p>- puis sur l'icône &nbsp;<img src='img/icones/itineraire.png' alt='itinéraire'></p>
+			<p>... et laissez-vous guider.</p>
+			<iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2709.4418958453143!2d-1.5537605841504296!3d47.227501579161355!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4805ee99ed6c5d25%3A0x18995709d53782b2!2sCommissariat+de+Police+Central+de+Nantes!5e0!3m2!1sfr!2sfr!4v1517266865893' width='600' height='450' title='nouvelle page google map' allowfullscreen></iframe>
+		<?php endif ?>
 
 		</section>
 	</main>
 
-	<footer>
-		<section><h3>Coordonnées de la <?= NOM_PHARMA ?></h3>
-			<p><?= NOM_PHARMA ?></p>
-			<p><?= ADR_PHARMA_L1 ?></p>
-			<p><?= CP_PHARMA ?> <?= VIL_PHARMA ?></p>
-			<p>tel - <?= TEL_PHARMA_DECO ?></p>
-			<p>fax - <?= FAX_PHARMA_DECO ?></p>
-		</section>
-		<section><h3>Informations sur l'editeur du site</h3>
-			<p>Édition CLR - 2018</p>
-		</section>
-	</footer>
+	<?php include('inclus/pdp.php'); ?>
+
 </body>
 </html>

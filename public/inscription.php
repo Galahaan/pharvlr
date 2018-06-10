@@ -1,115 +1,31 @@
 <?php
 
-session_start(); // en début de chaque fichier utilisant $_SESSION
-
-ini_set("display_errors", 1);  // sans doute à virer en prod, à vérifier  +++++++++++++++++++++++++++++       ++++++   +++++++   +++++++
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-/////     INCLUDE sécurisé
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-if( empty($page) ){
-$page = "functions"; // page à inclure : functions.php qui lui-même inclut constantes.php
-
-// On construit le nom de la page à inclure en prenant 2 précautions :
-// - ajout dynamique de l'extension .php
-// - on supprime également d'éventuels espaces en début et fin de chaîne
-$page = trim($page.".php");
-}
-
-// On remplace les caractères qui permettent de naviguer dans les répertoires
-$page = str_replace("../","protect",$page);
-$page = str_replace(";","protect",$page);
-$page = str_replace("%","protect",$page);
-
-// On interdit l'inclusion de dossiers protégés par htaccess.
-// S'il s'agit simplement de trouver la chaîne "admin" dans le nom de la page,
-// strpos() peut très bien le faire, et surtout plus vite !
-// if( preg_match("admin", $page) ){                        ok en PHP 5.6.30 mais plus en PHP 7.1.4  ********************
-if( strpos($page, "admin") ){
-	echo "Vous n'avez pas accès à ce répertoire";
-}
-else{
-    // On vérifie que la page est bien sur le serveur
-    if (file_exists("include/" . $page) && $page != 'index.php') {
-    	require_once("./include/".$page);
-    }
-    else{
-    	echo "Erreur Include : le fichier " . $page . " est introuvable.";
-    }
-}
-///////////////////////////////////////////////////////////////////////////////////////////////
-/////     FIN INCLUDE sécurisé
-///////////////////////////////////////////////////////////////////////////////////////////////
+include('inclus/entete.php');
 
 // ici on est obligé d'utiliser la fonction native telle quelle, sinon elle ne peut pas jouer son rôle de "_once" :
-require_once("./include/initDB.php"); // initDB.php inclut constantes.php
+require_once("./inclus/initDB.php");
 
 // Si le formulaire vient d'être validé, et avant de savoir si on va
 // sauvegarder les infos en BDD, on "nettoie" les champs :
 if( isset($_POST['bouton']) ){
 
-	//  *******  CIVILITE  *******
+	// Civilité
+
 	$civilite = $_POST['civilite'];
 
-	// pour traiter le prénom et le nom, on va travailler un peu sur les chaînes de caractères :
+	// Prénom
 
-	// Méthode de remplacement de caractères utilisant str_replace().
-	// Chaque caractère du tableau $trouverCar sera remplacé par son équivalent
-	// (même indice) dans le tableau $nouveauCar.
-	// Quand il n'y a pas de correspondance pour un caractère de $trouverCar dans $nouveauCar,
-	// ce qui est le cas pour tous les caractères sauf le '_', str_replace le remplace
-	// par le caractère vide : ''.
-	$trouverCar =
-	['_', '²', '&', '~', '#', '"', "'", '{', '}', '[', ']', '|', '`', '^', '@', '(', ')', '°', '=',
-	 '+', '€', '¨', '^', '$', '£', '¤', '%', '*', 'µ', '?', ',', ';', ':', '!', '§', '<', '>', '/', '\\',
-	 '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.'];
-	$nouveauCar = [' '];
+	$prenomFiltre = filtrerPrenom($_POST['prenom']);
+	$prenom = $prenomFiltre[0];
+	if( isset($prenomFiltre[1]) ) $erreurs['prenom'] = $prenomFiltre[1];
 
-	// Méthode de remplacement de caractères utilisant strtr() équivalente en temps à str_replace(),
-	// ici on a directement dans 1 seul tableau le remplaçant de chaque caractère :
-	$minusAccMajus =
-	['â' => 'Â', 'ä' => 'Ä', 'à' => 'À',
-	 'ê' => 'Ê', 'ë' => 'Ë', 'è' => 'È', 'é' => 'É', 
-	 'î' => 'Î', 'ï' => 'Ï', 'ì' => 'Ì',
-	 'ô' => 'Ô', 'ö' => 'Ö', 'ò' => 'Ò',
-	 'û' => 'Û', 'ü' => 'Ü', 'ù' => 'Ù',
-	 'ç' => 'Ç', 'ñ' => 'Ñ'];
+	// Nom
 
-	// utilisation des expressions régulières : remplacer tout ce qui n'est pas dans la liste par ''                       +++++++++
-	// et la liste serait constituée de a-z, A-Z, -, âäàêëéèîïì ... ñ
+	$nomFiltre = filtrerNom($_POST['nom']);
+	$nom = $nomFiltre[0];
+	if( isset($nomFiltre[1]) ) $erreurs['nom'] = $nomFiltre[1];
 
-
-	//  ********  PRENOM  ********
-
-	// supprime les balises HTML et PHP
-	$prenom = strip_tags($_POST['prenom']);
-	// str_replace : cf explications sur le remplacement de caractères ci-dessus
-	$prenom = str_replace($trouverCar, $nouveauCar, $prenom);
-	// enlève les espaces de début, fin, et les double-espaces en milieu de chaîne
-	$prenom = SuperTrim($prenom);
-	// 1ère lettre en majuscule, les autres en minuscules
-	$prenom = ucfirst(strtolower($prenom));
-	// test de la contrainte sur la longueur de la chaîne
-	if( (strlen($prenom) < NB_CAR_MIN) || (strlen($prenom) > NB_CAR_MAX ) ){
-		$erreurs['prenom'] = "(entre " . NB_CAR_MIN . " et " . NB_CAR_MAX . " caractères)";
-	}
-
-	//  ********  NOM  ********
-
-	$nom = strip_tags($_POST['nom']);
-	$nom = str_replace($trouverCar, $nouveauCar, $nom);
-	$nom = SuperTrim($nom);
-	// NOM en majuscule
-	$nom = strtoupper($nom);
-	$nom = strtr($nom, $minusAccMajus);
-
-	if( (strlen($nom) < NB_CAR_MIN) || (strlen($nom) > NB_CAR_MAX ) ){
-		$erreurs['nom'] = "(entre " . NB_CAR_MIN . " et " . NB_CAR_MAX . " caractères)";
-	}
-
-	//  ********  MAIL  ********
+	// Mail
 
 	// "nettoie" la valeur utilisateur :
 	$adrMailClient = filter_var($_POST['adrMailClient'], FILTER_SANITIZE_EMAIL);
@@ -141,75 +57,17 @@ if( isset($_POST['bouton']) ){
 		$mailExisteDeja = $requete->fetchAll();
 	}
 
-	//  ********  MOT DE PASSE  ********
+	// Mot de passe :
 
 	$password = $_POST['password'];
-		if( (strlen($password) < NB_CAR_MIN_MESSAGE) || (strlen($password) > NB_CAR_MAX_MESSAGE ) ){
-		$erreurs['password'] = "(entre " . NB_CAR_MIN_MESSAGE . " et " . NB_CAR_MAX_MESSAGE . " caractères)";
+		if( (strlen($password) < NB_CAR_MIN_MDP) || (strlen($password) > NB_CAR_MAX_MDP ) ){
+		$erreurs['password'] = "(entre " . NB_CAR_MIN_MDP . " et " . NB_CAR_MAX_MDP . " caractères)";
 	}
 	$passwordCrypte = password_hash($password, PASSWORD_DEFAULT);
 }
 ?>
-
-<!DOCTYPE html>
-<html lang='fr'>
-<head>
-	<title><?= NOM_PHARMA ?></title>
-	<meta charset='utf-8'>
-	<meta name='keywords' content='pharmacie, <?= MC_NOM_PHARMA ?>, <?= MC_QUARTIER ?>, <?= MC_CP ?>, <?= MC_1 ?>, <?= MC_2 ?>'>
-	<meta name='viewport' content='width=device-width, initial-scale=1'>
-	<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel='stylesheet' integrity='sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1' crossorigin='anonymous'>
-	<link rel='stylesheet' type='text/css' href='../css/style.css'>
-	<link rel='shortcut icon' href='../img/favicon.ico'>
-</head>
-
-<body>
-	<header>
-		<section>
-			<a href='../index.php'>
-				<img src='../img/croix_mauve.png' alt=''>
-				<h1><?= NOM_PHARMA ?></h1>
-				<h2><?= STI_PHARMA ?></h2>
-			</a>
-			<p id='iTelIndex'><i class='fa fa-volume-control-phone' aria-hidden='true'></i>&nbsp;&nbsp;<a href='tel:<?= TEL_PHARMA_UTIL ?>'><?= TEL_PHARMA_DECO ?></a></p>
-		</section>
-		<nav class='cNavigation'>
-			<ul>
-				<li><a href='../index.php'   >Accueil </a></li>
-				<li><a href='../horaires.php'>Horaires</a></li>
-				<li><a href='../equipe.php' >Équipe  </a></li>
-				<li><a href='../contact.php' >Contact </a></li>
-			</ul>
-		</nav>
-		<div class='cBandeauConnex'>
-			<?php
-				if( isset($_SESSION['client']) ){
-
-					// si le client est connecté, on affiche son nom et le lien pour se déconnecter :
-					echo "<div class='cClientConnecte'>";
-						echo $_SESSION['client']['prenom'] . " " . $_SESSION['client']['nom'];
-					echo "</div>";
-
-					echo "<div class='cLienConnex'>";
-						echo "<a href='deconnexion.php'>déconnexion</a>";
-					echo "</div>";
-				}
-				else{
-
-					// si le client n'est pas connecté, on affiche le lien pour se connecter :
-					echo "<div class='cClientConnecte'>";
-						echo " ";
-					echo "</div>";
-
-					echo "<div class='cLienConnex'>";
-						echo "<a href='connexion.php'>connexion</a>";
-					echo "</div>";
-				}
-			?>
-		</div>
-	</header>
-
-	<main>
+	<main id='iMain'>
+		<section id='iInscription' class='cSectionContour'><h2>Création de votre compte</h2>
 
 		<?php if( isset($_POST['bouton']) && !isset($erreurs) && !$mailExisteDeja ) : ?>
 
@@ -237,24 +95,26 @@ if( isset($_POST['bouton']) ){
 			// $requete->bindValue("passwordB", $passwordCrypte, PDO::PARAM_STR);
 
 			// d'où la solution : construire une chaîne de caractères complète, avec des guillemets là où il en faut !
-			$phraseRequete = "INSERT INTO " . TABLE_CLIENTS .
-							 " (dateCreation, civilite, nom, prenom, mail, password) VALUES ('" .
-							 $dateCrea . "', '" .
-							 $civilite . "', '" .
-							 $nom . "', '" .
-							 $prenom . "', '" .
-							 $adrMailClient . "', '" .
-							 $passwordCrypte . "')";
+			// (avant je délimitais les ch. de car. de la requête par des " et les variables par des ' mais
+			//  j'ai dû inverser le jour où j'ai décidé d'accepter le car. ' dans les noms : ex. Mc Kulloc'h )
+			$phraseRequete = 'INSERT INTO ' . TABLE_CLIENTS .
+							 ' (dateCreation, civilite, nom, prenom, mail, password) VALUES ("' .
+							 $dateCrea . '", "' .
+							 $civilite . '", "' .
+							 $nom . '", "' .
+							 $prenom . '", "' .
+							 $adrMailClient . '", "' .
+							 $passwordCrypte . '")';
 			$requete = $dbConnex->prepare($phraseRequete);
 			$requete->execute();
 
 			$nouvelId = $dbConnex->lastInsertId();
-			echo "<article class='cArtiMessageConfirm'>";
-			echo "<p>Merci, votre compte a bien été créé.</p>";
+			echo "<div class='cMessageConfirmation'>";
+				// NB: pour le braille, on positionne le focus (merci HTML5 !) comme ça ils n'ont pas à relire tout le début de la page pour accéder au message de confirmation.
+			echo "<p id='iFocus'>Merci, votre compte a bien été créé.</p>";
 			echo "<p>Vous pouvez dorénavant vous connecter ...</p>";
 			echo "<a href='connexion.php'>>  connexion  <</a>";
-			echo "</article>";
-			//header('Location: connexion.php');   ce serait pas mal de renvoyer vers la page connexion avec en paramètre le message de confirmation de création de compte.
+			echo "</div>";
 
 			?>
 
@@ -264,7 +124,9 @@ if( isset($_POST['bouton']) ){
 
 			// - soit il y a eu des erreurs dans le formulaire
 			//   => alors on ré-affiche les valeurs saisies (grâce à "value"),
-			//      ainsi qu'un message d'erreur pour les valeurs concernées.
+			//      ainsi qu'un message d'erreur pour les valeurs concernées,
+			//      le tout en activant l'autofocus, pour se déplacer
+			//      automatiquement jusqu'au formulaire.
 			//
 			// - soit le mail existait déjà en BDD
 			//   => il faut re-proposer le formulaire comme dans le cas où
@@ -272,48 +134,70 @@ if( isset($_POST['bouton']) ){
 			//
 			// - soit le formulaire n'a pas encore été rempli
 			//   => on laisse les cases vides.
+
+			// Si jamais il y a plusieurs erreurs, on ne placera le focus que sur la 1ère,
+			// d'où l'utilisation de ce booleen :
+			$focusErreurMis = false;
 			?>
 
-		<section class='cInscription'><h3>Création de votre compte</h3>
-			<p>Veuillez renseigner tous les champs ci-dessous svp.</p>
-			<form method='post'>
+			<sup>Veuillez renseigner tous les champs ci-dessous svp.</sup>
+			<form method='POST'>
 				<div class='cChampForm'>
-					<input type='radio' id='iCiviliteMme' name='civilite' value='Mme' required
-						<?= isset($civilite) && $civilite == "Mme" ? "checked" : ""?> >
-					<label for='iCiviliteMme'>Mme</label>
+					<input type='radio' id='iCiviliteMme'  name='civilite' value='Mme'  required
+						<?= $civilite == "Mme"  ? "checked" : ""?> >
+					<label for='iCiviliteMme' >Mme</label>
 					<input type='radio' id='iCiviliteMlle' name='civilite' value='Mlle' required
-						<?= isset($civilite) && $civilite == "Mlle" ? "checked" : ""?> >
+						<?= $civilite == "Mlle" ? "checked" : ""?> >
 					<label for='iCiviliteMlle'>Melle</label>
-					<input type='radio' id='iCiviliteM' name='civilite' value='M.' required
-						<?= isset($civilite) && $civilite == "M." ? "checked" : ""?> >
-					<label for='iCiviliteM'>M.</label>
+					<input type='radio' id='iCiviliteM'    name='civilite' value='M.'   required
+						<?= $civilite == "M."   ? "checked" : ""?> >
+					<label for='iCiviliteM'   >M.</label>
 				</div>
-
 				<div class='cChampForm'>
-					<label for='idPrenom'>Prénom</label>
-					<input type='text' id='idPrenom' name='prenom' minlength='<?= NB_CAR_MIN_HTM ?>' maxlength='<?= NB_CAR_MAX_HTM ?>' required <?= isset($prenom) ? "value=" . $prenom : ""?> >
-					<?php if( isset($erreurs['prenom']) ) { echo "<p><span>" . $erreurs['prenom'] . "</span></p>"; } ?>
+					<label for='iPrenom'>Prénom</label>
+						<input type='text' id='iPrenom' name='prenom' minlength='<?= NB_CAR_MIN_HTM ?>' maxlength='<?= NB_CAR_MAX_HTM ?>' required <?= isset($prenom) ? 'value="' . $prenom . '"' : ""?>
+							<?php	if( isset($erreurs['prenom']) && $focusErreurMis == false ){
+										echo " autofocus";
+										$focusErreurMis = true;
+									}
+							?>
+						>
+					<?php if( isset($erreurs['prenom']) ) { echo "<sub>" . $erreurs['prenom'] . "</sub>"; } ?>
 				</div>
-
 				<div class='cChampForm'>
-					<label for='idNom'>Nom</label>
-					<input type='text' id='idNom' name='nom' minlength='<?= NB_CAR_MIN_HTM ?>' maxlength='<?= NB_CAR_MAX_HTM ?>' required <?= isset($nom) ? "value=" . $nom : ""?> >
-					<?php if( isset($erreurs['nom']) ) { echo "<p><span>" . $erreurs['nom'] . "</span></p>"; } ?>
+					<label for='iNom'>Nom</label>
+						<input type='text' id='iNom' name='nom' minlength='<?= NB_CAR_MIN_HTM ?>' maxlength='<?= NB_CAR_MAX_HTM ?>' required <?= isset($nom) ? 'value="' . $nom . '"' : ""?>
+							<?php	if( isset($erreurs['nom']) && $focusErreurMis == false ){
+										echo " autofocus";
+										$focusErreurMis = true;
+									}
+							?>
+						>
+					<?php if( isset($erreurs['nom']) ) { echo "<sub>" . $erreurs['nom'] . "</sub>"; } ?>
 				</div>
-
 				<div class='cChampForm'>
-					<label for='idMail'>Adresse mail</label>
-					<input type='email' id='idMail' name='adrMailClient' required <?= isset($adrMailClient) ? "value=" . $adrMailClient : ""?> >
-					<?php if( isset($erreurs['adrMailClient']) ) { echo "<p><span>" . $erreurs['adrMailClient'] . "</span></p>"; } ?>
-					<?php if( $mailExisteDeja ) { echo "<p><span>Aïe, cet identifiant est déjà pris, veuillez en choisir un autre svp ...</span></p>"; } ?>
+					<label for='iMail'>Adresse mail</label>
+						<input type='email' id='iMail' name='adrMailClient' required <?= isset($adrMailClient) ? "value=" . $adrMailClient : ""?>
+							<?php	if( isset($erreurs['adrMailClient']) && $focusErreurMis == false ){
+										echo " autofocus";
+										$focusErreurMis = true;
+									}
+							?>
+						>
+					<?php if( isset($erreurs['adrMailClient']) ) { echo "<sub>" . $erreurs['adrMailClient'] . "</sub>"; } ?>
+					<?php if( $mailExisteDeja ) { echo "<sub>Aïe, cet identifiant est déjà pris, veuillez en choisir un autre svp ...</sub>"; } ?>
 				</div>
-
 				<div class='cChampForm'>
 					<label for='idPassword'>Mot de passe</label>
-					<input type='password' minlength='<?= NB_CAR_MIN_HTM ?>' maxlength='<?= NB_CAR_MAX_HTM ?>' id='idPassword' name='password' required <?= isset($password) ? $password : ""?> >
-					<?php if( isset($erreurs['password']) ) { echo "<p><span>" . $erreurs['password'] . "</span></p>"; } ?>
+						<input type='password' id='idPassword' name='password' minlength='<?= NB_CAR_MIN_MDP_HTM ?>' maxlength='<?= NB_CAR_MAX_MDP_HTM ?>' required
+							<?php	if( isset($erreurs['password']) && $focusErreurMis == false ){
+										echo " autofocus";
+										$focusErreurMis = true;
+									}
+							?>
+						>
+					<?php if( isset($erreurs['password']) ) { echo "<sub>" . $erreurs['password'] . "</sub>"; } ?>
 				</div>
-
 				<div class='cBoutonOk'>
 					<button name='bouton'>Valider</button>
 				</div>
@@ -324,17 +208,9 @@ if( isset($_POST['bouton']) ){
 
 	</main>
 
-	<footer>
-		<section><h3>Coordonnées de la <?= NOM_PHARMA ?></h3>
-			<p><?= NOM_PHARMA ?></p>
-			<p><?= ADR_PHARMA_L1 ?></p>
-			<p><?= CP_PHARMA ?> <?= VIL_PHARMA ?></p>
-			<p>tel - <?= TEL_PHARMA_DECO ?></p>
-			<p>fax - <?= FAX_PHARMA_DECO ?></p>
-		</section>
-		<section><h3>Informations sur l'editeur du site</h3>
-			<p>Édition CLR - 2018</p>
-		</section>
-	</footer>
+	<?php include('inclus/pdp.php'); ?>
+
+	<script src='scriptsJs/scripts.js'></script>
+
 </body>
 </html>

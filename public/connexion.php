@@ -1,10 +1,9 @@
 <?php
 
-session_start(); // en début de chaque fichier utilisant $_SESSION
+include('inclus/entete.php');
 
-ini_set("display_errors", 1);  // sans doute à virer en prod, à vérifier  +++++++++++++++++++++++++++++       ++++++   +++++++   +++++++
-
-require_once("./include/initDB.php"); // initDB.php inclut constantes.php
+// ici on est obligé d'utiliser la fonction native telle quelle, sinon elle ne peut pas jouer son rôle de "_once" :
+require_once("./inclus/initDB.php");
 
 $erreur = "";
 
@@ -29,6 +28,8 @@ if( isset( $_POST['connexion'] ) ) {
 			$_SESSION['client']['mail'] = $client['mail'];
 
 			// on retourne à l'accueil :
+			// A noter : ici, la fonction header fonctionne bien parce qu'on est bien au dessus
+			//           du DOCTYPE et que la page HTML n'a pas encore commencé à être chargée.
 			header("Location: index.php");
 		}
 		else{
@@ -42,72 +43,22 @@ if( isset( $_POST['connexion'] ) ) {
 	}
 }
 ?>
+	<main id='iMain'>
+		<section id='iConnexionIDs' class='cSectionContour'>
+			<p class='cIL'>Veuillez saisir vos identifiants de&nbsp;</p><h2 class='cIL'>connexion</h2><p class='cIL'>&nbsp;(*)</p>
 
-<!DOCTYPE html>
-<html lang='fr'>
-<head>
-	<title><?= NOM_PHARMA ?></title>
-	<meta charset='utf-8'>
-	<meta name='keywords' content='pharmacie, <?= MC_NOM_PHARMA ?>, <?= MC_QUARTIER ?>, <?= MC_CP ?>, <?= MC_1 ?>, <?= MC_2 ?>'>
-	<meta name='viewport' content='width=device-width, initial-scale=1'>
-	<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel='stylesheet' integrity='sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1' crossorigin='anonymous'>
-	<link rel='stylesheet' type='text/css' href='../css/style.css'>
-	<link rel='shortcut icon' href='../img/favicon.ico'>
-</head>
+			<br><br><?php // je sais, ces <br> sont affreux, mais depuis le 'inline' des p et h2 ci-dessus, je n'ai pas mieux ! ?>
 
-<body>
-	<header>
-		<section>
-			<a href='../index.php'>
-				<img src='../img/croix_mauve.png' alt=''>
-				<h1><?= NOM_PHARMA ?></h1>
-				<h2><?= STI_PHARMA ?></h2>
-			</a>
-			<p id='iTelIndex'><i class='fa fa-volume-control-phone' aria-hidden='true'></i>&nbsp;&nbsp;<a href='tel:<?= TEL_PHARMA_UTIL ?>'><?= TEL_PHARMA_DECO ?></a></p>
-		</section>
-		<nav class='cNavigation'>
-			<ul>
-				<li><a href='../index.php'   >Accueil </a></li>
-				<li><a href='../horaires.php'>Horaires</a></li>
-				<li><a href='../equipe.php'  >Équipe  </a></li>
-				<li><a href='../contact.php' >Contact </a></li>
-			</ul>
-		</nav>
-		<div class='cBandeauConnex'>
-			<?php
-				if( isset($_SESSION['client']) ){
+			<p class='cBraille'>
+				(*) Si vous ne disposez pas encore d'identifiants, vous pouvez vous inscrire <a href='inscription.php'>ici.</a>
+				(La CNIL protège vos données, cf mentions légales ci-dessous)
+			</p>
 
-					// si le client est connecté, on affiche son nom et le lien pour se déconnecter :
-					echo "<div class='cClientConnecte'>";
-						echo $_SESSION['client']['prenom'] . ' ' . $_SESSION['client']['nom'];
-					echo "</div>";
-
-					echo "<div class='cLienConnex'>";
-						echo "<a href='deconnexion.php'>déconnexion</a>";
-					echo "</div>";
-				}
-				else{
-
-					// si le client n'est pas connecté, on affiche le lien pour se connecter :
-					echo "<div class='cClientConnecte'>";
-						echo " ";
-					echo "</div>";
-
-					echo "<div class='cLienConnex'>";
-						echo "<a href='connexion.php'>connexion</a>";
-					echo "</div>";
-				}
-			?>
-		</div>
-	</header>
-
-	<main>
-		<section class='cConnexion'><h3>Veuillez saisir vos identifiants (*)</h3>
 			<p><?= ( ! empty($erreur) ) ? $erreur : "" ?></p>
 			<form method='POST'>
 				<div class='cChampForm'>
-					<label for='idMail'>mail</label>
-					<input type='text' id='idMail' name='mail' required>
+					<label for='iMail'>mail</label>
+					<input type='text' id='iMail' name='mail' required autofocus>
 				</div>
 
 				<div class='cChampForm'>
@@ -121,23 +72,14 @@ if( isset( $_POST['connexion'] ) ) {
 			</form>
 		</section>
 
-		<section class='cConnexionInscription'><h3>(*) Création d'un compte</h3>
-			<p>Si vous n'avez pas encore de compte, vous pouvez en créer un en suivant ce lien : </p>
+		<section id='iConnexionInscription'  class='cSectionContour'><h2>(*) Création d'un compte</h2>
+			<p>Si vous ne disposez pas encore d'identifiants, vous pouvez vous inscrire en suivant le lien : </p>
+			<p>(La CNIL protège vos données, cf mentions légales ci-dessous)</p>
 			<p><a href='inscription.php'>>  inscription  <</a></p>
 		</section>
 	</main>
 
-	<footer>
-		<section><h3>Coordonnées de la <?= NOM_PHARMA ?></h3>
-			<p><?= NOM_PHARMA ?></p>
-			<p><?= ADR_PHARMA_L1 ?></p>
-			<p><?= CP_PHARMA ?> <?= VIL_PHARMA ?></p>
-			<p>tel - <?= TEL_PHARMA_DECO ?></p>
-			<p>fax - <?= FAX_PHARMA_DECO ?></p>
-		</section>
-		<section><h3>Informations sur l'editeur du site</h3>
-			<p>Édition CLR - 2018</p>
-		</section>
-	</footer>
+	<?php include('inclus/pdp.php'); ?>
+
 </body>
 </html>

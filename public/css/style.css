@@ -1,12 +1,3 @@
-/* Gris clair : #ADADAD   Gris : #575757   Orange : #F29200   Marron : #7B6A57   Vert : #94C11D   Fuschia : #D84591   Mauve : #951A80 */
-/* 																													  Vert  : #819E27 */
-
-
-
-/* Police importée de Google fonts */
-/* (positionner cet import sur la 1ère ligne du fichier CSS, sinon ça peut bugger) */
-@import url('https://fonts.googleapis.com/css?family=Advent+Pro:400,700');
-
 
 /* Supprimer toutes les marges de toutes les balises */
 *{
@@ -18,163 +9,168 @@
 /* Configurer l'utilisation des 'rem' => 1 rem = 10 px */
 html{ font-size: 62.5%; }  /* => associé à body{ font-size: 1.5rem; } */
 
-/* les crochets [] permettent d'identifier un ATTRIBUT */
-a:not([target]){ text-decoration: none; }
-
 /* img = 100% de la largeur du parent */
 img{
 	width: 100%; /* avant c'était 'max-width', mais j'ai l'impression que 'width' tout court est plus logique ... */
 }
 
+/* plans fournis par Google maps */
+#iPdGplan iframe,
+#iContactPlan iframe{
+	width: 100%;
+	height: 50%;
+}
+
 body{
-	/* ligne associée à l'import de la police Google fonts */
-	font-family: 'Advent Pro', sans-serif;
  	text-align: center;/* étant donné que le texte est majoritairement centré dans tout le doc */
- 	background-color: #575757;
  	max-width: 95rem;
  	margin: auto;
 }
-main{
-	background-color: white;
+
+/* Visiblement, le font-family du body n'est pas pris en compte dans le textarea, */
+/* et de plus, la taille n'est pas bonne pour les input ...                       */
+/* (cf autre fichier CSS pour les polices et les couleurs) */
+.cChampForm input, .cChampForm textarea{
+	font-size: 1em;
 }
 
-.cBraille{
-	display: none;
+body, h2, p.cJour{
+	font-size: 1.8rem; /* taille par défaut de toutes les polices + les h2 et les p.cJour */
+	/* 		horaires.php : 																								*/
+	/* on utilise le p.cJour pour chaque jour de la semaine, il FAUT donc qu'il ait la même taille que celle du body 	*/
+	/* sinon, le trait de l'heure se décale vers le haut, les jours sont écrits plus gros ... bref c'est la merde ! 	*/
 }
-
-body, h3{
-	font-size: 1.8rem; /* taille par défaut de toutes les polices + les h3 */
-	/* 		horaires.php : 																							*/
-	/* on utilise le h3 pour chaque jour de la semaine, il FAUT donc qu'il ait la même taille que celle du body 	*/
-	/* sinon, le trait de l'heure se décale vers le haut, les jours sont écrits plus gros ... bref c'est la merde ! */
+/* icône du clicIndex */
+/* on l'exprime en 'rem' pour qu'elle ait la même taille à tous les endroits où             */
+/* l'on s'en sert (bandeau du haut, contact, mode d'emploi de prepaOrdo ...)                */
+/* cette classe ne sert d'ailleurs QUE pour définir la taille de l'icône dans tout le site. */
+/* pour ce qui est de sa position, il ne faudrait surtout pas utiliser cette classe, étant  */
+/* donné qu'il peut y avoir plusieurs fois cette icône dans la page ...                      */
+.cClicIndexTaille{
+	width: 3.2rem;
 }
 h1{
-	font-size: 2.5rem; /* titre de la page : Pharmacie des Fleurs */
+	font-size: 2.5rem; /* bandeau : titre 'Nom de la pharmacie' */
 }
-h2{
-	font-size: 1.5rem; /* sous-titre de la page : Nantes, ... */
+h1+strong{
+	font-size: 1.5rem; /* bandeau : sous-titre 'adresse ...' */
 }
-#iTelIndex{
-	font-size: 2rem; /* sous-titre de la page : numéro de tel cliquable */
+#iTelBandeau{
+	font-size: 2rem; /* bandeau : sous-titre 'numéro de tel cliquable' */
 }
-.cVignettes article h4{
-	font-size: 2.5rem; /* titres des vignettes de la page Index */
-}
-.cGammes article h4 {
-	font-size: 3.5rem; /* titres des photos § de la page gammesProduits */
+#iIndex article h3{
+	font-size: 2.5rem; /* index, titres des vignettes */
 }
 .fa-phone, .fa-fax, .fa-envelope{
-	font-size: 2rem; /* taille des icônes font-awesome : tel, fax et mail */
+	font-size: 2rem; /* contact, taille des icônes font-awesome : tel, fax et mail */
 }
-.cChampForm input, .cChampForm textarea{
-	font-size: 1.8rem;
+#iGammesProd article h3{
+	font-size: 1.8rem; /* gammesProduits, titres des photos § */
 }
-.cChampForm p span{
-	font-size: 1.3rem; /* messages d'erreurs dans les form. contact, ordonnance et commande */
+sup, sub{
+	font-size: .7em; /* contact, ordo, comm et inscrip : 'saisie obligatoire' et 'mess. d'erreurs' */
 }
-.cColDroite h4{
-	font-size: 2.2rem; /* intro du form. de contact "Envoyez-nous un message ... " */
+#iHumour p:last-of-type{
+	font-size: 1.4rem;   /* humour, 'Merci à ...' */
 }
-.cColDroite{
-	font-size: 1.8rem; /* coordonnées de la pharmacie */
+.cSectionContour{
+	padding: 5% 2% 0; /* espace autour des sections principales du site */
 }
-.cHumour p:last-of-type {
-	font-size: 1.4rem;   /* humour.php, "Merci à ..." */
+/* affichés ou pas (validation W3C / braille), les titres */
+/* de toutes les sections ont un peu de marge dessous     */
+.cSectionContour h2{
+	padding-bottom: 5.8%;
 }
-footer section:first-of-type{
-	font-size: 1.3rem; /* Pharmacie des Fleurs ... */
+/* on utilise cette classe pour que des phrases, constituées de plusieurs balises, soient bien sur une seule ligne. */
+/* (ex. <p class='cIL'>Le </p><h2 class='cIL'>ciel </h2><p class='cIL'>est bleu.</p>) */
+.cIL{
+	display: inline;
 }
 
-h3{
-	font-weight: 400;  /* on les met tous en 'normal' par défaut */
-	/*height: 98%;*/
+/***************************************************************************************************************************************/
+/***************************************************         bandeau du haut         ***************************************************/
+/***************************************************************************************************************************************/
+/* lien anti-aspiration du site */
+#iPiegeAA{
+	height: 0.1rem;
+	display: none;
 }
-
-/* ******************************************************************************************** */
-/* ******************************        Bandeau du haut         ****************************** */
-/* ******************************************************************************************** */
+#iPiegeAA img{
+	width: 0.1rem;
+	height: 0.1rem;
+	border: 0;
+	margin: auto;
+}
 
 /* Image de fond */
 header section{
-	background-color: lightgrey;                /* dans le cas où l'image ne peut être chargée, ça fait un fond par défaut */
-	background-image: url('../img/fond.jpg'), url('../img/fond_light.jpg');
+	background-image: url('../img/bandeau/fond.jpg'), url('../img/bandeau/fond_light.jpg');
 	/* Les navigateurs chargeront en premier les images spécifiées en fin de ligne (fond_light.jpg)
 	   et chargeront ensuite vers la gauche (fond.jpg). */
 	background-size: cover;
-	background-position: left;
+	background-position: left; /* ça permet d'ajuster légèrement la position de l'image dans le bandeau */
 	margin: auto;
 	padding-top: 15%;
 	padding-bottom: 15%;
-	position: relative; /* pour positionner le h1, le h2 et la croix en haut à gauche */
+	position: relative; /* pour positionner le h1, le h1+strong, l'icône clicIndex et la croix en haut à gauche */
 }
 
 /* Image de la croix positionnée en haut à gauche */
-header section img{
+#iLogoCroix{
 	width: 11%;
 	position: absolute;
-	top: 1rem;
-	left: 1rem;
+	top: 5%;
+	left: 2%;
+	display: none;  /* pas de croix en version mobile car pas assez de place */
 }
 
-/* titre + sous-titre du bandeau supérieur */
-h1, h2{
-	color: #951A80;
-	font-weight: 700;
-	position : absolute;
-	left: 16%;
-	font-family: 'Advent Pro', sans-serif;
+/* titre + sous-titre + tel bandeau du haut */
+h1, h1+strong, #iTelBandeau{
+	position: absolute;
 }
 /* titre : Pharmacie ... */
 h1{
-	top: 0;
+	top: 0.5rem;
+	left: 7%;
 }
-/* sous-titre : Nantes ... */
-h2{
-	top: 28%;
+/* sous-titre : adresse ... */
+h1+strong{
+	top: 38%;
+	left: 5%;
 }
 
 /* numéro de téléphone cliquable */
-#iTelIndex {
-	color: #951A80;
-	font-weight: 700;
-	position: absolute;
-	top: 52%;
-	left: 23%;
+#iTelBandeau{
+	top: 58%;
+	left: 38%;
+}
+/* icône du clicIndex dans le bandeau */
+#iTelBandeau img{
+	position: absolute; /* visiblement, si on a le contenant (#iTelBandeau) en absolute,     */
+	top: 0.8rem;        /* et le contenu (#iTelBandeau img) en absolute, ça marche aussi !   */
+	/* on ne met volontairement pas de left, comme ça ça se cale à la suite du texte !       */
+	/* (et si on a besoin de décaler un peu plus vers la droite, on met des &nbsp; en HTML)  */
+	/* l'avantage de tout ça, c'est que l'icône est 'collée' au texte, quelle que soit la    */
+	/* taille de lécran ! :)                                                                 */
 }
 
-/* NB : il faut respecter cet ordre de déclaration : link < visited < hover < focus < active */
-/*      (pour que visited n'écrase pas hover, et que la navigation au clavier se passe bien sous IE : hover > focus > active)*/
-#iTelIndex a:link, #iTelIndex a:visited, #iTelIndex a:hover, #iTelIndex a:focus, #iTelIndex a:active{
-	color: #951A80;
-}
-
-
-/* ******************************************************************************************** */
-/* *******************************       Menu de navigation       ***************************** */
-/* ******************************************************************************************** */
-nav{
-	background-color: #94C11D;
+/***********************************************************************************************/
+/********************************       menu de navigation       *******************************/
+/***********************************************************************************************/
+nav#iNavigation{
 	text-align: right;
 	padding: 0.5rem;
 }
-
-nav a{
-	color: white;
-}
-
-ul{
+#iNavigation ul{
 	margin:	auto;
 	position: relative; /* à cause du 'first li' */
 }
-
-.cNavigation li{
+#iNavigation li{
 	display: inline-block;
 	margin-right: 0rem;
 	padding-left: .4rem;
-	font-weight: 400;
 }
-
-.cNavigation li:first-child{
+#iNavigation li:first-child{
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -182,127 +178,66 @@ ul{
 	padding-left: 0;
 }
 
-/****************************************************/
-/*               Bandeau de connexion               */
-/****************************************************/
-.cBandeauConnex{
-	background-color: #ADADAD;
+/***********************************************************************************************/
+/**********************                bandeau de connexion               **********************/
+/***********************************************************************************************/
+#iBandeauConnex{
 	width: 96%;
 	padding: 0 2%;
 }
-.cClientConnecte{
+#iClientConnecte{
 	display: inline-block;
 	width: 65%;
 	text-align: left;
 }
-.cLienConnex{
+#iLienConnex{
 	display: inline-block;
 	width: 34%;
 	text-align: right;
 }
-.cLienConnex a{
-	color: black;
+
+/***************************************************************************************************************************************/
+/*******************************************          pages connexion et inscription         *******************************************/
+/***************************************************************************************************************************************/
+/* la petite ligne de séparation avec le § sur l'inscription     */
+/* est codée dans la partie 'page contact' ci-dessous            */
+
+/* on met un peu d'espace au-dessus du lien 'inscription'        */
+#iConnexionInscription p:nth-of-type(2){
+	padding-bottom: 5%;
 }
 
-/****************************************************/
-/*           pages connexion et inscription         */
-/****************************************************/
-.cConnexion h3, .cConnexionInscription h3, .cInscription h3{
-	padding: 2rem 0;
-	font-weight: 700;
+/***************************************************************************************************************************************/
+/****************************************************           page index          ****************************************************/
+/***************************************************************************************************************************************/
+.cSectionContour#iIndex{
+	padding-left: 0;
+	padding-right: 0;     /* pour annuler, exceptionnellement, les paddings de .cSectionContour */
 }
-/* pour que les lignes fines entre les champs ne fassent pas toute la largeur de la colonne */
-.cConnexion, .cInscription{
-	margin: 0 1rem;
+#iIndex p:first-child{
+	padding-bottom: 5.8%; /* 'la pharmacie est actuellement ...' */
 }
-
-/****************************************************/
-/*                  page connexion                  */
-/****************************************************/
-
-/* la petite ligne de séparation avec le § sur l'inscription */
-/* est codée dans la partie 'page contact' ci-dessous        */
-
-/* on met un peu d'espace au-dessus du lien 'inscription' */
-.cConnexionInscription p:first-of-type{
-	padding-bottom: 0.5rem;
-}
-/* on met de la couleur sur le lien 'inscription' */
-.cConnexionInscription a{
-	color: #7B6A57;
-	font-weight: 700;
-}
-.cConnexionInscription a:hover, .cConnexionInscription a:focus, .cConnexionInscription a:active{
-	color: #F29200;
-}
-/* un peu d'espace avant le footer */
-.cConnexionInscription{
-	padding-bottom: 4rem;
-}
-
-/****************************************************/
-/*                 page inscription                 */
-/****************************************************/
-
-/* pour positionner latéralement les civilités dans le formulaire */
-.cInscription .cChampForm [for='iCiviliteM'] {
-	padding-right: 25%;
-}
-
-
-/* ******************************************************************************************** */
-/* ******************************           page index           ****************************** */
-/* ******************************************************************************************** */
-
-.cIntro {
-	padding: 4rem 0 6rem 0;
-}
-
-/* page Index - <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-.cIntro h3, .cVignettes h3 {
-	display: none;	/* Etat actuel d'ouverture ... et Services proposés ... */
-}
-
-/* Ces <span> sont ajoutés dans la fonction 'pharmacieOuverte' et non directement dans index.html */
-.cIntro span {
-	font-weight: bold;
-}
-.cIntro .cOuverte {
-	color: #4DBC1C;
-}
-.cIntro .cFermee {
-	color: #FF4141;
-}
-.cIntro .cOuvreDans {
-	color: black;
-}
-.cIntro .cFermeDans {
-	color: #F29200;
-}
-.cVignettes article{
+#iIndex article{
 	position: relative; /* pour que les <a> et les <img> soient superposés */
-	/*margin-bottom: -0.6rem;  sinon, il y a une petite bande blanche en dessous de l'image ... ??!!   */
 }
-.cVignettes article a{
+#iIndex article a{
 	position: absolute;
 	top: 0;
 	left: 0;
-	background-color: #94C11D;
-	color: white;
 	width: 100%;
 	height: 100%;
-	font-weight: 700;
-	/*line-height: 1.4em;  line-height = hauteur de l'interligne, si jamais le nom de la vignette ne tient pas sur une seule ligne */
+	/* si jamais le nom de la vignette ne tient pas sur une seule ligne,  */
+	/* on peut régler la hauteur de l'interligne :   line-height: 1.4em;  */
 	opacity: 0;
 }
 
-/* NB : il faut respecter cet ordre de déclaration : link < visited < hover < focus < active */
+/* NB : il faut respecter cet ordre de déclaration : link > visited > hover > focus > active */
 /*      (pour que visited n'écrase pas hover, et que la navigation au clavier se passe bien sous IE : hover > focus > active)*/
-.cVignettes article a:hover, .cVignettes article a:focus, .cVignettes article a:active{
+#iIndex article a:hover, #iIndex article a:focus, #iIndex article a:active{
 	opacity: .85;
 }
 
-.cVignettes article h4{
+#iIndex article h3{
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -314,412 +249,274 @@ ul{
 
 /* pour supprimer l'espace de qqs pixels sous l'image */
 /* alsacreations.com/astuce/lire/52-espaces-sous-les-images.html */
-.cVignettes article img {
+#iIndex article img{
 	display: block;
 }
 
 
-/* ******************************************************************************************** */
-/* ******************************          page contact          ****************************** */
-/* ******************************************************************************************** */
+/***************************************************************************************************************************************/
+/****************************************************          page contact          ***************************************************/
+/***************************************************************************************************************************************/
 
-/* ********************     colonne de gauche : formulaire de contact      ******************** */
+/**************     sections informations pratiques + plan     *************/
 
-
-/* message d'introduction au formulaire : "Envoyez-nous un message ... " */
-.cColGauche h4{
-	padding: 2rem 0;
-	font-weight: 700;
+#iContactInfosPratiques p, #iContactPlan p{
+	text-align: justify;
+	padding: 1% 0;
 }
 
-/* "la saisie de tous les champs ..." */
-.cFormContact section span:first-of-type{
-	font-size: 1.2rem;
-}
+/************     coordonnées et liens vers réseaux sociaux     ************/
 
-/* pour positionner latéralement les civilités dans le formulaire */
-.cFormContact .cChampForm [for='iCiviliteM'] {
-	padding-right: 25%;
-}
-
-/* pour que les lignes fines entre les champs ne fassent pas toute la largeur de la colonne */
-.cColGauche section{
-	margin: 0 1rem;
-}
-
-/* lignes fines entre les champs, taille des champs ... */
-.cChampForm{
-	border: none;
-	border-top: .1rem solid #951A80;
-	padding: 1.5rem 0;
-	width: 100%;
-	text-align: right;
-}
-/* Cette partie est commune aux 5 formulaires : contact, connexion, inscription, ordonnance et commande */
-/* proportions entre label et input pour les champs du formulaire */
-.cChampForm input:not([type='radio']), .cChampForm textarea{
-	font-weight: bold;
-	font-family: 'Raleway', sans-serif;;
-	width: 62%;
-	margin-left: 3%;
-	margin-right: 1.5%;
-}
-.cChampForm [type='radio']{
-	font-weight: bold;
-	font-family: 'Raleway', sans-serif;;
-	margin-left: 5%	
-}
-
-/* pour bloquer la largeur du champ texte */
-.cChampForm textarea{
-	min-width: 62%;
-	max-width: 62%;
-	margin-left: 3%;
-}
-
-/* label 'Message' calé en haut, ligne fine sous le message */
-.cChampForm [for='iMessageTextarea']{
-	vertical-align: top;
-}
-
-/* messages d'erreurs dans les form. contact, ordonnance et commande */
-.cChampForm p span{
-	text-align: right;
-	padding-right: 1.2rem;
-	color: red;
-}
-
-/* proportion entre label et button pour le bouton de validation */
-.cBoutonOk{
-	text-align: right;
-}
-
-/* déco du bouton de validation du formulaire */
-.cBoutonOk button{
-	background-color: #7B6A57;
-	color: white;
-	width: auto;
-	font-weight: 400;
-	padding: 1rem;
-	margin-right: 2rem;
-	border: none;
-	border-radius: 5px;
-}
-
-/* NB : il faut respecter cet ordre de déclaration : link < visited < hover < focus < active */
-/*      (pour que visited n'écrase pas hover, et que la navigation au clavier se passe bien sous IE : hover > focus > active)*/
-.cBoutonOk button:hover, .cBoutonOk button:focus, .cBoutonOk button:active{
-	background-color: #F29200;
-}
-
-/* Espaces au dessus et au dessous du message de confirmation d'envoi du formulaire */
-.cFormContact .cArtiMessageConfirm {
-	padding: 3rem 1rem 0;
-}
-
-/* ************     colonne de droite : coordonnées et liens vers réseaux sociaux      ************ */
-
-/* pages connexion et page contact        */
-/* ligne fine de séparation entre les 2 § */
-/* (en version mobile uniquement !)       */
-.cColDroite:before, .cConnexionInscription:before{
+/* page contact et page connexion :         */
+/* petit trait horizontal au dessus du §    */
+/* (en version mobile uniquement !)         */
+#iContactCoordonnees:before, #iContactPlan:before, #iContactFormulaire:before, #iConnexionInscription:before{
 	content: '';
 	display: block;
 	height: .2rem;
 	width: 4rem;
-	margin: 2rem auto 0;
-	background-color: #951A80;
+	margin: 0 auto 2rem;
 }
-
-/* espace en dessous des icônes fb et g+ */
-.cColDroite {
-	padding-bottom: 4rem;
+/* marge au dessus du n° de tel (ie en dessous de '35290 Gaël') */
+#iContactTel{
+	padding-top: 1rem;
 }
-
-/* marge au dessus de "Pharmacie des Fleurs" */
-.cColDroite p:first-of-type{
-	padding-top: 3rem;
-}
-
-/* marge en dessous de Nantes */
-.cColDroite p:nth-of-type(3){
-	padding-bottom: 2rem;
-}
-
 /* positions de tel, fax et mail */
 /* on les décale très légèrement vers la gauche puisque les icônes les avaient décalées vers la droite */
-.cColDroite p:nth-of-type(4),
-.cColDroite p:nth-of-type(5),
-.cColDroite p:nth-of-type(6){
+#iContactTel, #iContactCoordonnees p:nth-of-type(5), #iContactMail{
 	padding-bottom: 1rem;
-	position: relative;
+	position: relative;    /* #iContactTel en a aussi besoin ci-dessous pour le clicIndex */
 	top: 0;
 	left: -0.8rem;
 }
-
-/* tel en gras et souligné */
-#iTelContact{
-	font-weight: bold;
-	text-decoration: underline;
+/* icône du clicIndex (#iContactTel est déjà en position relative, cf ci-dessus) */
+#iContactTel img{
+	position: absolute;
+	top: 1.8rem;
+	/* cf ctrl+F #iTelBandeau img{ pour plus d'explications */
 }
-/* NB : il faut respecter cet ordre de déclaration : link < visited < hover < focus < active */
-/*      (pour que visited n'écrase pas hover, et que la navigation au clavier se passe bien sous IE : hover > focus > active)*/
-#iTelContact a:link, #iTelContact a:visited, #iTelContact a:hover, #iTelContact a:focus, #iTelContact a:active{
-	color: black;
-}
-
-/* soulignement et coloration du mail quand on passe dessus */
-.cColDroite p:nth-of-type(6) a{
-	text-decoration: underline;
-}
-
-.cColDroite p:nth-of-type(6) a:link, .cColDroite p:nth-of-type(6) a:visited{
-	color: black;
-}
-
-.cColDroite p:nth-of-type(6) a:hover, a:focus, a:active{
-	color: #F29200;
-}
-
 /* espace avant les liens FB et G+ */
-.cColDroite p:nth-of-type(6){
-	margin-bottom: 3rem;
+#iContactMail{
+	padding-bottom: 3rem;
 }
-
-
 /* fontawesome pour les icônes 'tel', 'fax' et 'mail' */
-.cColDroite .fa-phone, .cColDroite .fa-fax, .cColDroite .fa-envelope{
-	margin-right: 2rem;
+#iContactCoordonnees .fa-phone, #iContactCoordonnees .fa-fax, #iContactCoordonnees .fa-envelope{
+	margin-right: 3%;
 	position: relative;
 	top: 0.2rem;
 	left: 0;
 }
-
 /* icônes/liens vers Facebook et Google+ */
-.cColDroite p:nth-of-type(7), .cColDroite p:nth-of-type(8){
+#iContactCoordonnees p:nth-of-type(7), #iContactCoordonnees p:nth-of-type(8){
 	display: inline-block;
 	height: 3rem;
 	width: 3rem;
 	margin: 0 3rem; /* pour les espacer un peu */
 	position: relative;
 }
-
-.cColDroite .cFaceGool{
+#iContactCoordonnees .cFaceGool{
 	position: absolute;
 	top: 0;
 	left: 0;
 }
-
-/* NB : il faut respecter cet ordre de déclaration : link < visited < hover < focus < active */
-/*      (pour que visited n'écrase pas hover, et que la navigation au clavier se passe bien sous IE : hover > focus > active)*/
-.cColDroite .cCouleurNoire:hover, .cColDroite .cCouleurNoire:focus, .cColDroite .cCouleurNoire:active{
+#iContactCoordonnees .cCouleurNoire:hover{
 	display: none;
 }
 /* j'ai essayé avec visibility, z-index ... dessus / dessous ... rien n'y fait, c'est toujours "oscillant" */
 
 
-/* Fin de Contact */
+/*******************************     plan     ******************************/
 
-/* ******************************************************************************************** */
-/* ******************************        page ordonnance         ****************************** */
-/* ******************************          + commande            ****************************** */
-/* ******************************************************************************************** */
+/* icône de guidage GPS */
+#iContactPlan p:nth-last-of-type(2){
+	position: relative;       /* ^ permet de sélectionner l'avant-dernier élément ! */
+}
+#iContactPlan p img, #iPdGplan img{
+	width: 3rem;
+	position: absolute;
+	top: -.2rem;
+	/* cf ctrl+F #iTelBandeau img{ pour plus d'explications */
+}
+/* un peu d'espace avant le plan */
+#iContactPlan p:last-of-type{
+	padding-bottom: 2rem;
+}
 
-/* espace entre le bandeau et le formulaire */
-/* et entre le formulaire et le footer      */
-.cFormOrdo, .cFormComm{
-	padding: 2rem 0; /* si on met un margin, il prend la couleur de fond du body */
+/**********************     formulaire de contact     **********************/
+
+/* plus rien de spécial ... */
+
+/***************************************************************************************************************/
+/* Cette partie est commune aux 5 formulaires :                                                                */
+/*                                                                                                             */
+/*       => contact, connexion, inscription, ordonnance et commande                                            */
+/*                                                                                                             */
+
+/* lignes fines entre les champs, taille des champs ...                                                        */
+.cChampForm{
+	/* cf theme.css pour le border-top: */
+	padding: 1.5rem 0;
+	width: 100%;
+	text-align: right;
 }
-.cFormOrdo h3, .cFormComm h3 {
-	font-weight: bold;
+/* pour positionner latéralement les civilités                                                                 */
+.cChampForm [for='iCiviliteM']{
+	padding-right: 20%;
+}
+/* proportions entre label et input pour les champs du formulaire                                              */
+.cChampForm input:not([type='radio']){
+	width: 58%;
+	margin-left: 3%;
+	margin-right: 1.5%;
+}
+.cChampForm [type='radio']{
+	margin-left: 5%;
+}
+/* message dans le champ 'textarea'                                                                            */
+.cChampForm textarea{
+	text-align: justify;
+	/* pour bloquer la largeur du champ texte                                                                  */
+	min-width: 59.5%; /* bizarrement, si on met 58%, ça n'est pas tout                                         */
+	max-width: 59.5%; /* à fait aligné avec les input situées au-dessus                                        */
+	margin-left: 3%;
 }
 
-/* Espaces au dessus et au dessous du message de confirmation d'envoi du formulaire */
-.cFormOrdo .cArtiMessageConfirm, .cFormComm .cArtiMessageConfirm {
-	padding: 10% 8% 45%;
+/* label 'Message' calé en haut                                                                                */
+.cChampForm [for='iMessageTextarea']{
+	vertical-align: top;
 }
-/* Espace entre les 2 phrases du message de confirmation d'envoi du formulaire */
-.cFormOrdo .cArtiMessageConfirm p:first-of-type, .cFormComm .cArtiMessageConfirm p:first-of-type {
-	padding-bottom: 8%;
+
+/* mess. d'erreurs dans les form. contact, inscrip, ordo et comm             partie commune aux 5 formulaires  */
+sub{
+	display: block;
+	padding-right: 1%;
+	/* pour positionner le message un peu plus bas                                                             */
+	position: relative;
+	top: .8rem;
 }
+
+/* proportion entre label et button pour le bouton de validation                                               */
+.cBoutonOk{
+	text-align: right;
+}
+
+/* déco du bouton de validation du formulaire                                                                  */
+.cBoutonOk button{
+	width: auto;
+	padding: 1rem;
+	margin-right: 2rem;
+	border: none;
+	border-radius: 5px;
+}
+
+/*--------------------------------------------------------------------------------                             */
+/*                                                                                                             */
+/*                  petit § dédié aux messages de confirmation                                                 */
+/*                     (d'envoi, de création de compte, ...)                                                   */
+/*    communs aux pages contact, inscription, prepaCommande et prepaOrdonnance                                 */
+/*                                                                                                             */
+
+/* espaces autour de la div des messages de confirmation                                                       */
+.cMessageConfirmation{
+	padding: 5% 0 18%;
+}
+/* espace sous les 2 phrases du message de confirmation                                                        */
+.cMessageConfirmation p{
+	padding-bottom: 3%;
+}
+
+/*               fin du § sur les messages de confirmation                                                     */
+/*--------------------------------------------------------------------------------                             */
+
+/*               fin de la partie commune aux 5 formulaires                                                    */
+/***************************************************************************************************************/
+
+
+/***************************************************************************************************************************************/
+/**************************************       page prepaOrdonnance   +   page prepaCommande       **************************************/
+/***************************************************************************************************************************************/
 
 /* marges autour du § d'introduction situé au dessus du formulaire */
-.cArtiIntro {
-	padding: 1rem 1rem;      /*     haut et bas : 1rem      gauche et droite : 1rem      */
+#iBlablaIntro{
+	padding-bottom: 5.8%;
 	text-align: justify;
 }
 
-/* N'oubliez pas l'original de l'ordonnance ... */
-.cCouleurRouge {
-	color: red;
-	font-weight: bold;
+/* position et marges autour de 'Mode d'emploi' */
+#iOrdoPrepaOrdo article:first-of-type{
+	text-align: left;
 }
-
-/* calage et couleur(s) du lien "mode d'emploi" */
-#iModeEmploi h4{
-	padding: 0 0 2rem 3rem;
+#iOrdoLienModeEmploi{
+	padding: 0 0 8% 5%;
+	position: relative;
 }
-#iModeEmploi:link, #iModeEmploi:visited {
-	color: #F29200;
+/* position du clicIndex */
+#iOrdoLienModeEmploi img{
+	position: absolute;    /* on a mis le relative juste au-dessus */
+	top: 0.8rem;
+	/* cf ctrl+F #iTelBandeau img{ pour plus d'explications */
 }
-#iModeEmploi:hover, #iModeEmploi:focus, #iModeEmploi:active {
-	color: black;
-}
-
 /* par défaut, le mode d'emploi est masqué */
-#iModeEmploi + .cModeEmploi {
+#iOrdoModeEmploi{
 	display: none;
 }
-
-/* quand on clique sur Mode d'emploi, ça le déplie */
-#iModeEmploi:active + .cModeEmploi, #iModeEmploi:focus + .cModeEmploi {
+/* quand on clique sur le lien 'Mode d'emploi', ça le déplie */
+#iOrdoModeEmploi:target{
 	display: block;
 }
 
-/* calage à gauche dans l'article du mode d'emploi */
-.cFormOrdo article:first-of-type{
-	text-align: left;
-}
-
 /*  § Mode d'emploi  */
-.cFormOrdo .cModeEmploi {
-	padding: 2rem;
-	margin: 0 .5rem 2rem .5rem;
-	background-color: #5B5B5B;
-	color: white;
+#iOrdoModeEmploi{
+	padding: 7%;
+	margin: 2% 2% 8%;
 	text-align: left;
 }
-
 /* centrage de l'intro */
-.cFormOrdo .cModeEmploi div {
-	font-style: normal;
+#iOrdoModeEmploi div{
 	text-align: center;
-	margin-bottom: 2rem;
-}
-
-/* les 4 étapes en gras */
-.cFormOrdo .cModeEmploi span{
-	font-weight: bold;
-	text-decoration: underline;
+	margin-bottom: 5%;
 }
 
 /* un peu d'espace entre les différents points du mode d'emploi */
-.cFormOrdo .cModeEmploi ol li, .cFormOrdo .cModeEmploi ol li span{
-	margin: 1.5rem 0;
+#iOrdoModeEmploi ol li, #iOrdoModeEmploi ol li span{
+	margin: 4% 0;
 }
 
-/* message pour l'accès impossible aux fichiers sur certains smartphones */
-.cFormOrdo .cModeEmploi ul li p:nth-of-type(2){
-	color: orange;
-	font-weight: bold;
-}
-
-.cFormOrdo .cModeEmploi li{
-	margin-left: 1rem;
-}
-
-.cFormOrdo .cModeEmploi ul{
-	margin-left: 2rem;
-}
-
-/* saisie obligatoire des champs */
-.cSaisieObligatoire {
-	font-size: .8em;
-}
-
-/* pour positionner latéralement les civilités dans le formulaire */
-.cFormOrdo .cChampForm [for='iCiviliteM'], .cFormComm .cChampForm [for='iCiviliteM'] {
-	padding-right: 25%;
+/* décalage des puces de 2e niveau */
+#iOrdoModeEmploi ul{
+	margin-left: 8%;
 }
 
 /* blabla au dessus du champ 'textarea' */
-.cFormOrdo .cChampForm p:first-child{
+#iOrdoPrepaOrdo .cChampForm p:first-child{
 	text-align: justify;
-	padding: 0 1.2rem 1.2rem 1.2rem;
-}
-/* Message dans le champ 'textarea' */
-#iMessageTextarea {
-	font-weight: normal;
-	text-align: justify;
+	padding: 0 4% 4% 4%;
 }
 
+/***************************************************************************************************************************************/
+/***************************************************          page horaires          ***************************************************/
+/***************************************************************************************************************************************/
 
-/* ******************************************************************************************** */
-/* ******************************             Horaires           ****************************** */
-/* ******************************************************************************************** */
-
-/* la date aujourd'hui */
-main > p:first-child{
-	font-weight: bold;
-	padding: 2.2rem 2rem 1rem 2rem;
-}
-/* l'heure qu'il est, en rose */
-.cCouleurRose {
-	color: #D84591;
-}
-/* message sur l'état d'ouverture / fermeture de la pharmacie */
-main > p:nth-child(2){
-	padding: 0 2rem 1rem 2rem;
-}
-/* position des infos dans la page */
-.cHoraires {
-	padding-top: 2rem;
-	width: 94%;																	/* modifié en MQ 600 px */
-	margin: auto;
-}
-/* <h2> ajouté pour la validation W3C mais non affiché */
-.cHoraires h2 {
-	display: none;	/* Créneaux horaires ... */
-}
-.cHoraires article {
+/* chaque jour de la semaine */
+#iHorairesTableau article{
 	text-align: left;
 	padding-bottom: .5rem;
 }
-/* pour que chaque article, contenant le h3 et les div, ne prenne qu'une seule ligne */
-.cHoraires article div, .cHoraires article h3 {
+/* pour que chaque article, contenant le p.cJour (jour) et les div (heures), ne prenne qu'une seule ligne */
+#iHorairesTableau p.cJour, #iHorairesTableau article div{
 	display: inline-block;
 }
-/* - couleur de fond par défaut des créneaux horaires d'ouverture */
-/* - couleur de fond d'un créneau écoulé du jour en cours         */
-.cHoraires article div, #iAujourdhui .cCreneauOff {			/*  Attention: il y a d'autres instructions pour #iAujourdhui .cCreneauOff  */
-	background-color: rgba(148, 193, 29, .2);
-}
-/* la ligne 'aujourd'hui' est mise en valeur => couleur de fond un peu plus soutenue et police différente  */
-#iAujourdhui div, #iAujourdhui h3 {
-	background-color: rgba(148, 193, 29, .5);
-	font-weight: bold;
-	color: #D84591;
-}
-/* on ne veut pas mettre le jour actuel et le tiret en fond vert */
-.cSemaine h3, .cSamedi h3, .cSemaine .cTiret,
-#iAujourdhui h3, #iAujourdhui .cTiret {
-	background-color: white;
-	color: black;
-}
-/* et le tiret reste en normal */
-#iAujourdhui .cTiret {
-	font-weight: normal;
-}
-/* pour finir de désactiver un créneau passé du jour actuel */
-/* on a déjà mis la couleur de fond un peu plus haut        */
-#iAujourdhui .cCreneauOff {
-	color: black;
-	font-weight: normal;
-}
+
 /* =======================     Pour créer un trait vertical représentant l'heure     ============================= */
-.cSemaine, .cSamedi {
+.cSemaine, .cSamedi{
 	position: relative;
 }
-#iAujourdhui #iTraitHoraire {
-	background-color: rgba(255, 255, 255, 0); /* en fait, seul importe le 0 final, ie 'transparence totale'. */
-	/* NB: j'avais testé 'opacity: 0;' => mais TOUT disaparaît, y compris la border */
-
-	border-left: solid #D84591 2px;
+#iHorairesTraitVH{
+	/* cf theme.css pour le trait vertical qui est représenté par :   border-left: solid #xxx 2px; */
 	position: absolute;
 	top: 0; /* la valeur du left est déterminée en PHP dans le HTML */
 }
-#iAujourdhui .cEffacerTrait, .cHoraires article .cEffacerTrait {
-	background-color: rgba(255, 255, 255, 0); /* en fait, seul importe le 0 final, cf NB ci-dessus */
+#iHorairesAujourdhui .cEffacerTrait, #iHorairesTableau article .cEffacerTrait{
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -729,153 +526,141 @@ main > p:nth-child(2){
 /* ========================                                                               ======================== */
 /* ========================     largeurs et marges des jours et des créneaux horaires     ======================== */
 /* ========================                                                               ======================== */
-/* ========================  !!! si modifications => les reporter dans functions.php !!!  ======================== */
+/* ========================  !!! si modifications => les reporter dans fonctions.php !!!  ======================== */
 /* ========================                                                               ======================== */
 /* jours de la semaine */
-.cHoraires article h3 {
+#iHorairesTableau p.cJour{
 	width: 23%;
-	background-color: white;
 }
 /* 8h30 */
-.cHoraires .cSemaine div:nth-child(2) {
+#iHorairesTableau .cSemaine div:nth-child(2){
 	width: 14%;				/* cette valeur (14%) et celle du segment suivant (14%) ci-dessous            */
 	padding-left: 1%;		/* doivent être égales, pour la linéarité de la progression du trait vertical */
 }
 /* 12h30 */
-.cHoraires .cSemaine div:nth-child(3) {
+#iHorairesTableau .cSemaine div:nth-child(3){
 	width: 14%;
 	text-align: right;
 	padding-right: 1%;
 }
 /* - */
-.cHoraires .cSemaine .cTiret {
-	background-color: white;
+#iHorairesTableau .cSemaine .cTiret{
 	width: 5%;
 	text-align: center;
 }
 /* 14h */
-.cHoraires .cSemaine div:nth-child(5) {
+#iHorairesTableau .cSemaine div:nth-child(5){
 	width: 19%;				/* cette valeur (19%) et celle du segment suivant (19%) ci-dessous            */
 	padding-left: 1%;		/* doivent être égales, pour la linéarité de la progression du trait vertical */
 }
 /* 19h30 */
-.cHoraires .cSemaine div:nth-child(6) {
+#iHorairesTableau .cSemaine div:nth-child(6){
 	width: 19%;
 	text-align: right;
 	padding-right: 1%;
 }
 /* samedi */
-.cHoraires .cSamedi h3 {
-	background-color: white;
+#iHorairesTableau .cSamedi p.cJour{
 	width: 26.75%;      /* cette valeur bizarre permet d'aligner '9h le samedi' avec '9h en semaine' */
 }
 /* samedi 9h */
-.cHoraires .cSamedi div:nth-child(2) {
+#iHorairesTableau .cSamedi div:nth-child(2){
 	width: 21.9%;   /* cette valeur bizarre permet d'aligner '16h le samedi' avec '16h en semaine' */
 	text-align: left;
 	padding-left: 1%;
 }
 /* samedi 16h */
-.cHoraires .cSamedi div:nth-child(3) {
+#iHorairesTableau .cSamedi div:nth-child(3){
 	width: 21.9%;   /* cf ci-dessus, et ces 2 valeurs doivent être égales, pour la linéarité de la progression du trait vertical */
 	text-align: right;
 	padding-right: 1%;
 }
 
 /* ========================                                                               ======================== */
-/* ========================  !!! si modifications => les reporter dans functions.php !!!  ======================== */
+/* ========================  !!! si modifications => les reporter dans fonctions.php !!!  ======================== */
 /* ========================                                                               ======================== */
 /* =============================================================================================================== */
 
-/* blabla en dessous des horaires */
-.cHoraires p{
+
+/***************************************************************************************************************************************/
+/************************************************          page pharma de garde         ************************************************/
+/***************************************************************************************************************************************/
+
+/* texte justifié dans les 2 sections */
+#iPdG3237, #iPdGplan{
 	text-align: justify;
+}
+
+/* -----------   Section 3237   ----------- */
+
+/* centrer la croix verticalement et horizontalement */
+#iPdGcroix{
+	position: relative;
+	padding-bottom: 35%;
+}
+#iPdGcroix img{
+	position: absolute;
+	top: 58%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%); /* pour Chrome */
+	   -moz-transform: translate(-50%, -50%); /* pour Firefox */
+			transform: translate(-50%, -50%);
+	width: 38%;
+}
+
+/* -----------   section plan   ----------- */
+
+/* on centre l'adresse du commissariat */
+#iPdGplan p:nth-of-type(2){
+	text-align: center;
+	padding: 8% 0;
+}
+
+/* un peu d'espace entre chaque ligne */
+#iPdGplan p{
 	padding: 1% 0;
 }
-.cHoraires p:first-of-type {
-	padding-top: 4%;
-}
-.cHoraires p span {
-	font-weight: bold;
-}
-
-/* ******************************************************************************************** */
-/* ******************************         pharmaDeGarde          ****************************** */
-/* ******************************************************************************************** */
-
-/* section pharmaDeGarde */
-.cPharmaDeGarde {
-	padding: 2rem;
-	min-height: 28rem; /* pour ne pas que le bas de l'écran remonte trop haut */
-}
-.cPharmaDeGarde p {
-	padding-top: 12rem;
-}
-.cPharmaDeGarde a {
-	font-weight: bold;
-	text-decoration: underline;
-}
-
-
-/* ******************************************************************************************** */
-/* ******************************             humour             ****************************** */
-/* ******************************************************************************************** */
-
-/* section humour */
-.cHumour {
-	padding: 2rem;
-	min-height: 31rem; /* pour ne pas que le bas de l'écran remonte trop haut */
+/* pour pouvoir positionner l'img (icône de guidage GPS) */
+#iPdGplan p:nth-last-of-type(2){
 	position: relative;
 }
+/* icône de guidage GPS */
+/* cf ctrl+F #iPdGplan img{ */
 
-/* titre "Thérapie par l'humour" */
-.cHumour h3 {
-	padding: 3rem 0 5rem;
-	font-weight: bold;
+/* un peu d'espace entre la dernière ligne et le plan */
+#iPdGplan p:last-of-type{
+	padding-bottom: 2rem;
 }
 
-/* la blague */
-.cHumour p:first-of-type {
-	padding-bottom: 8rem; /* permet de laisser toujours une marge entre la fin de la blague et (*) */
-}
+/***************************************************************************************************************************************/
+/*********************************************          page gammes de produits          ***********************************************/
+/***************************************************************************************************************************************/
 
-/* Merci à ... */
-.cHumour p:last-of-type {
-	font-family: Arial;
-	text-align: left;
-	position: absolute;
-	bottom: 2rem;		/* calé en bas, juste au dessus du footer */
-	left: 2rem;
-}
-.cHumour a {
-	text-decoration: underline;
-}
 
-/* ******************************************************************************************** */
-/* ******************************         gammesProduits         ****************************** */
-/* ******************************************************************************************** */
-
-/* titre "Les Marques que ..." */
-.cGammes h3 {
-	padding: 3rem 0 5rem;
-	font-weight: bold;
+/* Comme la classe cSectionContour définit des marges latérales, et qu'ici, */
+/* exceptionnellement, on n'en veut pas, on les supprime :                  */
+#iGammesProd{
+	padding-left: 0;
+	padding-right: 0;
 }
-
+/* sélectionne   <article>   qui est placé immédiatement après   <h2>   qui est un enfant (direct ou pas) de   #iGammesProd   */
+#iGammesProd > h2 + article{
+	padding-top: 2rem;
+}
 /* image d'introduction au § */
-.cGammes article .cImageDeco img {
+#iGammesProd article .cImageDeco img{
 	display: block; 				/* pour supprimer l'espace de qqs pixels sous l'image, cf index.php pour l'explication */
 	opacity: 0.3;
 }
 
 /* pour caler les titres des articles sur l'image */
-.cGammes article .cImageDeco {
+#iGammesProd article .cImageDeco{
 	position: relative;
-	border: 0.3rem solid #951A80;
+	/* cf theme.css pour la bordure autour de l'image :   border: 0.3rem solid #xxx;  */
 }
 
-/* titres en mauve, placé sur l'image */
-.cGammes article h4 {
-	color: #951A80;
+/* titres placés sur les images */
+#iGammesProd article h3{
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -886,529 +671,530 @@ main > p:nth-child(2){
 }
 
 /* organisation des textes et des images associées */
-.cGammes article div p, .cGammes article div:not(.cImageDeco) img {
+#iGammesProd article div p, #iGammesProd article div:not(.cImageDeco) img{
 	display: inline-block;
 	vertical-align: middle;
 	padding: 1%;
 }
 
 /* organisation des textes et des images associées : proportion texte / image */
-.cGammes article div p {
+#iGammesProd article div p{
 	width: 55%;
 }
-.cGammes article div:not(.cImageDeco) img {
+#iGammesProd article div:not(.cImageDeco) img{
 	width: 40%;
 }
 
-/* alternance de gris et de blanc entre les différents produits d'un même § */
-.cGammes article div:nth-child(2n+1) {
-	background-color: #EFEFFF;
+/***************************************************************************************************************************************/
+/************************************************        pages infos et promos        **************************************************/
+/***************************************************************************************************************************************/
+#iPromos, #iInfos{
+	min-height: 30vh; /* hauteur min = 30% du viewport, ie de la taille de l'écran, complétée par le bas */
 }
-/* réglage de la taille des images                                                              =>  à ajouter dans les media queries +++++++++++++   */
-/*.cGammes article div:not(.cImageDeco) img {
-	width: 80%;
+
+/***************************************************************************************************************************************/
+/************************************************              page aide              **************************************************/
+/***************************************************************************************************************************************/
+#iAide h1, #iAide h2{
+	position: static;   /* pour 'supprimer' le 'position: absolute' du bandeau */
 }
+#iAide h1{
+	font-size: 3rem;
+}
+#iAide h2{
+	font-size: 2.5rem;
+	text-align: left;
+}
+#iAide p{
+	padding-bottom: 2rem;
+	text-align: left;
+}
+#iAide ol, #iAide h3{
+	padding-bottom: 1rem;
+	text-align: left;
+}
+#iAide ol{
+	padding-left: 5%;
+}
+
+/***************************************************************************************************************************************/
+/************************************************        page mentions légales        **************************************************/
+/***************************************************************************************************************************************/
+
+/* petite mise en page */
+#iMentionsLegales h3{
+	text-align: center;
+	text-decoration: underline;
+	padding: 8% 0;
+}
+/* entité */
+#iMentionsLegales .gauche{
+	text-align: left;
+	padding: 2%;
+}
+/* logo */
+#iMentionsLegales img{
+	padding-left: 2%;
+	width: 25%;
+	float: left;
+}
+/* coordonnées de l'entité */
+#iMentionsLegales .droite{
+	text-align: right;
+	padding: 0 2% 4% 10%;
+}
+
+/***************************************************************************************************************************************/
+/****************************************************             Footer            ****************************************************/
+/***************************************************************************************************************************************/
+
+/* Ca sert surtout pour l'index, pour annuler les float left des vignettes : */
+footer{
+	clear: both;
+}
+/* footer 1ère section : Mentions légales */
+footer section:first-of-type{
+	padding: 5% 2%;
+}
+
+/* footer 2ème section : Editeur du site */
+footer section:last-of-type{
+	padding: 5% 2%;
+}
+
+/* ********************************************************************************************************************************************** */
+/* ********************************************************************************************************************************************** */
+/* *******************************************************                                ******************************************************* */
+/* *******************************************************          Media queries         ******************************************************* */
+/* *******************************************************                                ******************************************************* */
+/* ********************************************************************************************************************************************** */
+/* ********************************************************************************************************************************************** */
+
+
+/* Cette petite partie n'a en fait pas été traitée plus haut mais     */
+/* concerne les titres <h2> qui peuvent être dans 3 états différents. */
+/* (il était donc judicieux de les rassembler dans un même endroit)   */
+/*                                                                    */
+/* - <h2> toujours affichés                                           */
+/*        (c'est le cas par défaut,                                   */
+/*         avec font-weight en gras, cf theme.css)                    */
+/*                                                                    */
+/*        - #iIndex h2                                                */
+/*        - #iHorairesIntro h2                                        */
+/*        - #iContactPlan h2                                          */
+/*        - #iContactFormulaire h2                                    */
+/*        - #iOrdoPrepaOrdo h2                                        */
+/*        - #iCommPrepaComm h2                                        */
+/*        - #iGammesProd h2                                           */
+/*        - #iPdG3237 h2 (ie #iPdGh21 et #iPdGh22 )                   */
+/*        - #iMentionsLegales h2                                      */
+/*        - footer h2                                                 */
+/*                                                                    */
+/* - <h2> jamais affichés (mais nécessaires pour la validation W3C)   */
+/*        - #iHorairesTableau h2                                      */
+/*        - #iPdGplan h2                                              */
+/*                                                                    */
+/* - <h2> affichés uniquement pour les medias braille                 */
+/*        - #iContactInfosPratiques h2                                */
+/*        - #iContactCoordonnees h2                                   */
+/*                                                                    */
+/*                                                                    */
+
+/**********************************************************************/
+/* <h2> toujours affichés (c'est le cas par défaut)                   */
+/* ici on regroupe les exceptions :                                   */
+
+/* ... 'pharmacie de garde' ... */
+#iPdGh21{
+	padding-bottom: 0; /* juste en-dessous, c'est la grosse croix, et ça présente mieux sans espace dessous */
+}
+/* 'Pharmacie de garde' */
+#iPdGh22{
+	text-align: center; /* dans ce cas, le h2 est le titre de la section, donc on le centre */
+	padding-bottom: 0;  /* juste en-dessous, il y a une .cSectionContour avec déjà son padd-bott à 5.8% */
+}
+/* cf theme.css pour le font-weight de
+	footer h2
+	#iIndex h2  'Services proposés par ...'
+	#iPdGh21  '... pharmacie de garde en cliquant ...'
 */
 
-/* ******************************************************************************************** */
-/* ******************************              Footer            ****************************** */
-/* ******************************************************************************************** */
-
-/* <h3> ajouté pour la validation W3C mais non affiché */
-footer h3 {
+/*                                                                    */
+/**********************************************************************/
+/* <h2> jamais affichés (mais nécessaires pour la validation W3C)     */
+#iHorairesTableau h2,             /* 'Horaires d'ouverture de la ...' */
+#iPdGplan h2                      /* 'Localiser le commissariat ...'  */
+{
 	display: none;
 }
 
-footer{
-	background-color: white;
-}
+/*																														NOT BRAILLE	*/
+/**********************************************************************/
+/* <h2> affichés uniquement pour les medias braille                   */
+/*                                                                    */
+@media not braille{
+	/* je suis obligé de faire les choses "à l'envers" :                                                         */
+	/*    -> comme la propriété css 'display' permet d'effacer un élément (display: none)                        */
+	/*       mais pas de le ré-afficher s'il a déjà subi un 'display: none'                                      */
+	/*       (il n'existe pas de 'display: on', même si 'display: block' peut parfois nous rendre service)       */
+	/*    -> ainsi, au lieu de dire "j'efface les titres, mais pour les medias de type braille, je les affiche", */
+	/*       => je dis "pour les medias de type non braille (@media not braille), j'efface les titres"           */
 
-/* Pharmacie des Fleurs ... */
-footer section:first-of-type{
-	text-align: center;
-}
+	#iContactInfosPratiques h2,	  /* 'Informations pratiques'         */
+	#iContactCoordonnees h2 	  /* 'Coordonnées de la ...'          */
+	{
+		display: none;
+	}
 
-footer section:first-of-type p{
-	display: inline-block;
-	padding: .5rem 1rem;
-}
-
-/* Edition CLR */
-footer section:last-of-type{
-	padding: 1rem 0;
-	background-color: #575757;
-	color: white;
-}
-
-/* ******************************************************************************************** */
-/* ******************************          Media queries         ****************************** */
-/* ******************************************************************************************** */
-
-/* 																									460 px		*/
-@media screen and (min-width: 460px){
+/* Fin de la gestion de l'affichage des <h2>                          */
+/**********************************************************************/
 
 	.cBraille{
 		display: none;
 	}
+}
 
-	/* page Index - <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	.cIntro h3, .cVignettes h3 {
-		display: none;	/* Etat actuel d'ouverture ... et Services proposés ... */
-	}
+/*																															BRAILLE	*/
+@media braille{
 
-	/* page Contact <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	.cFormContact h3{
+	/* NB : Apparemment, la propriété 'display: none' n'a aucun effet sur les lecteurs d'écran.     :(   */
+	/*      Que l'on soit dans le § général (cf qqs h2 ci-dessus en 'display: none'),                    */
+	/*      ou en @media braille, cela ne change rien, les lecteurs d'écran affichent tout !             */
+
+	/* Ci-dessous, c'est ce que l'on souhaitait, mais cela n'a aucun effet    :(                         */
+	/* - iHorairesTableau : le tableau graphique des horaires est remplacé par une phrase les résumant   */
+	/* - iPiegeAA         : on n'affiche pas le lien anti-aspiration (enteteXX.php)                      */
+	#iHorairesTableau, #iPiegeAA{         
 		display: none;
 	}
+}
 
-	body, h3{
-		font-size: 2rem; /* old 1.8 */
+/* 																															460 px	*/
+@media screen and (min-width: 460px){
+
+	body, h2, p.cJour{
+		font-size: 2rem;
 	}
 	/* On augmente un peu les tailles de polices et le nombre de vignettes en largeur */
 	h1{
-		font-size: 2.7rem;	/* old 2.5 titre de la page : Pharmacie des Fleurs */
-		top: 4%;			/* old 0 */
+		font-size: 2.7rem;
+		top: 5%;
+		left: 18%;
 	}
-	h2{
-		font-size: 1.7rem;	/* old 1.5 sous-titre de la page : Nantes, ... */
+	h1+strong{
+		font-size: 1.7rem;
+		top: 28%;
+		left: 18%;
 	}
-	#iTelIndex{
-		left: 27%;			/* old 23% */
+	#iLogoCroix{
+		width: 14%;
+		display: block;
 	}
-
+	#iTelBandeau{
+		font-size: 2.1rem;
+		top: 48%;
+		left: 28%;
+	}
+	#iTelBandeau img{
+		top: 2rem;
+	}
 	/* page Index : on affiche 2 vignettes en largeur */
-	.cVignettes article{
+	#iIndex article{
 		width: 50%;
 		float: left;
-	}
-	section:not(.cVignettes){
-		/* Supprimer le flottement */
-		clear: both;
-	}
-
-	/* intro du form. de contact "Envoyez-nous un message ... " */
-	.cColDroite h4{
-		font-size: 2.35rem;	/* old 2.2rem */
-	}
-
-	/* tailles des champs saisis dans le formulaire et des messages associés */
-
-	.cChampForm input, .cChampForm textarea{
-		font-size: 2rem; /* old 1.8 */
-	}
-
-	/* blabla au dessus du champ 'textarea' */
-	.cFormOrdo .cChampForm p:first-child{
-		width: 58%;					/* aucune valeur */
-		margin-left: 33%;			/*     avant     */
-	}
-
-	/* messages d'erreurs dans les form. contact, ordonnance et commande */
-	.cChampForm p span{
-		font-size: 1.5rem; /* old 1.3 */
-	}
-	.cColDroite{
-		font-size: 2rem; /* old 1.8 coordonnées de la pharmacie */
 	}
 
 	/*     page prepaOrdonnance     */
 
-	/* marges autour du § d'introduction situé au dessus du formulaire */
-	.cArtiIntro {
-		padding: 2rem 2rem;				/* old : 1rem   1rem			*/
+	/* blabla au dessus du champ 'textarea' */
+	#iOrdoPrepaOrdo .cChampForm p:first-child{
+		width: 58%;						/* aucune valeur */
+		margin-left: 33%;				/*     avant     */
 	}
-	/* calage du lien "mode d'emploi" */
-	#iModeEmploi p{
-		padding: 0 0 2rem 5rem;			/* old : 0 0 2rem 3rem			*/
+
+	/* icône du clicIndex */
+	#iOrdoLienModeEmploi img{
+		top: 1.2rem;					/* old 0.8 */
 	}
-	/*  § Mode d'emploi  */
-	.cModeEmploi {
-		margin: 0 2rem 2rem 2rem;		/* old : 0 .5rem 2rem .5rem		*/
+
+	/*         page contact        */
+
+	/* icône de guidage GPS */
+	#iContactPlan p img, #iPdGplan img{
+		width: 4rem;					/* old 3   */
+	}
+
+	/* on arrange un peu le formulaire */
+	#iContactFormulaire .cChampForm input:not([type='radio']){
+		width: 64%;
+	}
+	#iContactFormulaire .cChampForm textarea{
+		min-width: 65.5%; /* bizarrement, si on met 62%, ça n'est pas tout  */
+		max-width: 65.5%; /* à fait aligné avec les input situées au-dessus */
+	}
+
+	/* réglage de la taille des images                                                              =>  à ajouter dans les media queries +++++++++++++   */
+	/*#iGammesProd article div:not(.cImageDeco) img{
+		width: 80%;
+	}
+	*/
+
+	/*      page PharmaDeGarde      */
+
+	/* icône de guidage GPS */
+	/* cf ctrl+F #iPdGplan img{ */
+
+	/* Mentions légales */
+	#iMentionsLegales .gauche{
+		padding-left: 5%;
+	}
+	#iMentionsLegales img{
+		padding-left: 5%;
+		width: 18%;
+	}
+	#iMentionsLegales .droite{
+		padding-right: 5%;
 	}
 
 	/*           page humour           */
 
 	/* "Merci à ..." */
-	.cHumour p:last-of-type {
+	#iHumour p:last-of-type{
 		font-size: 1.6rem;				/* old : 1.4rem					*/
 	}
-
 }
 
-/* 																									600 px		*/
+/* 																															600 px	*/
 @media screen and (min-width: 600px){
 
-	.cBraille{
-		display: none;
-	}
-
-	/* page Index - <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	.cIntro h3, .cVignettes h3 {
-		display: none;	/* Etat actuel d'ouverture ... et Services proposés ... */
-	}
-
-	/* page Contact <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	.cFormContact h3{
-		display: none;
-	}
-
-	/* On augmente encore un peu les tailles */
-	body, h3{
-		font-size: 2.3rem; /* old 2 */
+	body, h2, p.cJour{
+		font-size: 2.1rem;
 	}
 	h1{
-		font-size: 3.8rem;	/* old 2.7 - titre de la page : Pharmacie des Fleurs */
-		top: 7%;			/* old 4% */
+		font-size: 3.8rem;
+		top: 4%;
+		left: 18%;
 	}
-	h2{
-		font-size: 2.5rem;	/* old 1.7 - sous-titre de la page : Nantes, ... */
+	h1+strong{
+		font-size: 2.5rem;
+		top: 28%;
+		left: 18%
 	}
-	#iTelIndex{
-		font-size: 2.5rem;	/* old 2 en mobile - numéro de tel cliquable */
-		left: 34%;			/* old 27% */
+	#iTelBandeau{
+		font-size: 2.5rem;
 	}
-	#iTelIndex .fa-volume-control-phone{
-		display: none;
+	#iTelBandeau img{
+		top: 2.5rem;
 	}
-	nav{
+	nav#iNavigation{
 		padding: 1rem; /* hauteur du bandeau de nav */
 	}
-
-	.cNavigation li{
+	#iNavigation li{
 		font-size: 2.5rem;
-		font-weight: 700;
 		margin-right: 1rem; /* on éloigne un peu les mots du bord de droite */
 		padding-left: 1rem; /* et aussi entre eux */
 	}
-
-	.cNavigation li:first-child{
+	#iNavigation li:first-child{
 		left: 0.5rem; /* on éloigne un peu Accueil du bord de gauche */
 		top: 0;
 	}
 
-	/* Formulaire de contact */
-
-	/* espace entre le bandeau et les infos de contact */
-	.cFormContact{
-		padding: 3rem 0; /* old 1 0 */
-	}
-
-	/* tailles des champs saisis dans le formulaire et des messages associés */
-	/* + taille des coordonnées de la colonne d'à côté */
-	.cFormContact section form, .cColDroite{
-		font-size: 2.1rem; /* old 2 */
-	}
-
-	/* messages d'erreurs dans les form. contact, ordonnance et commande */
-	.cChampForm p span{
-		font-size: 2rem; /* old 1.5 */
-	}
-
-	/* "la saisie de tous les champs ..." */
-	.cFormContact section span:first-of-type{
-		font-size: 1.5rem; 		/* old 1.2 */
-	}
-
-	/* pour positionner latéralement les civilités dans le formulaire de contact */
-	.cFormContact .cChampForm [for='iCiviliteM'] {
-		padding-right: 10%;
-	}
-
-
-	/* coordonnées de la pharmacie */
-	.cColGauche p:first-of-type, .cColGauche p:nth-of-type(2), .cColGauche p:nth-of-type(3){
-		font-size: 2.35rem;
-	}
-	.cColGauche p:nth-of-type(3){
-		margin-bottom: 3rem; 	/* old 2 marge en dessous de Nantes */
-	}
-
-	/* positions de tel, fax et mail */
-	.cColGauche p:nth-of-type(4),
-	.cColGauche p:nth-of-type(5),
-	.cColGauche p:nth-of-type(6){
-		margin-bottom: 3rem; /* old 1 */
-	}
-	.cColDroite:before{
-		content: none; /* on annule le trait avec le § précédent puisqu'on passe sur 2 colonnes */
-	}
-
-	/* pour que les lignes fines entre les champs ne soient pas trop près du bord de droite */
-	.cColDroite section{
-		margin: 0 2rem 0 0;
-	}
-
-	.cFormContact{
-		display: inline-block; /* c'est là qu'on passe en 2 colonnes */
-		vertical-align: top;
-	}
-
-	/* proportion colonne de gauche / colonne de droite */
-	.cColGauche{
-		width: 48%;
-	}
-
-	.cColDroite{
-		width: 50%;
-	}
+	/*********************************    page contact   **********************************/
 
 	/* font-awesome pour les icônes 'tel', 'fax' et 'mail' */
 	.fa-phone, .fa-fax, .fa-envelope{
-		font-size: 3rem; /* old 2 */
+		font-size: 3rem;
 	}
 
-
-	/* Footer */
-
-	footer section:first-of-type{
-		font-size: 1.5rem; /* old 1.3 */
+	/* icône du clicIndex */
+	#iContactTel img{
+		top: 2.5rem;
+	}
+	/* on décale un peu vers la droite le blabla */
+	#iContactPlan p{
+		padding-left: 10%;
+	}
+	/* icône de guidage GPS */
+	#iContactPlan p img, #iPdGplan img{
+		width: 4.5rem;
 	}
 
-	footer section:first-of-type p{
-		padding: 1rem 1rem; /* old .5rem 1rem */
-	}
+	/*******************************   page pharmaDeGarde   *******************************/
 
-	/*     page prepaOrdonnance     */
+	/* icône de guidage GPS */
+	/* cf ctrl+F #iPdGplan img{ */
 
-	/* marges autour du § d'introduction situé au dessus du formulaire */
-	.cArtiIntro {
-		padding: 3rem 3rem;				/* old : 2rem   2rem			*/
-	}
-	/* calage du lien "mode d'emploi" */
-	#iModeEmploi p{
-		padding: 0 0 3rem 5rem;			/* old : 0 0 2rem 5rem			*/
-	}
-	/*  § Mode d'emploi  */
-	.cModeEmploi {
-		padding: 3rem;					/* old : 2rem					*/
-		margin: 0 3rem 3rem 3rem;		/* old : 0 2rem 2rem 2rem		*/
-	}
+	/******************************  page mentions légales  *******************************/
 
-	/*        page horaires         */
-	.cHoraires {
-		width: 85%;						/* old : 90%   */
+	#iMentionsLegales .gauche{
+		padding-left: 15%;
 	}
-
-	/*           page humour           */
-
-	/* taille minimale obligatoire de la section */
-	.cHumour {
-		min-height: 45rem;
+	#iMentionsLegales img{
+		padding-left: 15%;
+		width: 15%;
 	}
-
-	/* "Merci à ..." */
-	.cHumour p:last-of-type {
-		font-size: 1.8rem;				/* old : 1.6rem					*/
+	#iMentionsLegales .droite{
+		padding-right: 15%;
 	}
 }
 
 
-/* 																									900 px		*/
+/* 																															900 px	*/
 @media screen and (min-width: 900px){
 
-	.cBraille{
-		display: none;
+	body, h2, p.cJour{
+		font-size: 2.2rem;
 	}
-
-	/* page Index - <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	.cIntro h3, .cVignettes h3 {
-		display: none;	/* Etat actuel d'ouverture ... et Services proposés ... */
-	}
-
-	/* page Contact <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	.cFormContact h3{
-		display: none;
-	}
-
-	body, h3{
-		font-size: 2.5rem; /* old 2.3 */
-	}
-	/* on agrandit un peu la croix */
-	header section img{
-		width: 16%;
-		top: 2rem;
-		left: 2rem;
-	}
-
-	/* titre : Pharmacie ... */
 	h1{
-		font-size: 4.5rem;	/* old 3.8 */
-		top: 8%;			/* old 7% */
-		left: 21%;			/* old 16% en mobile */
+		font-size: 4.5rem;
+		top: 5%;
+	}
+	h1+strong{
+		font-size: 2.8rem;
+		left: 18%;
+	}
+	#iTelBandeau{
+		font-size: 2.8rem;
 	}
 
-	/* sous-titre : Nantes ... */
-	h2{
-		font-size: 2.8rem;	/* old 2.5 */
-		left: 21%;			/* old 16% en mobile */
-	}
-
-	#iTelIndex{
-		font-size: 2.8rem;	/* old 2.5 */
-	}
-
-	/* page Index : on passe en 2 vignettes en largeur */
-	.cVignettes article{
+	/* page Index : on passe en 3 vignettes en largeur */
+	#iIndex article{
 		width: 33.33%;
 	}
 
-
-	/* page connexion : espace au-dessus du lien 'inscription' */
-	.cConnexionInscription p:first-of-type{
-	padding-bottom: 2rem;
-}
-
-	/* Formulaire de contact */
-
-	/* "la saisie de tous les champs ..." */
-	.cFormContact section span:first-of-type{
-		font-size: 1.7rem; 		/* old 1.5 */
+	/* page Horaires */
+	/* pour recentrer l'ensemble du tableau */
+	#iHorairesTableau{
+		padding-left:  14%;
+		padding-right: 14%;
 	}
 
+	/* page Contact */
+	#iContactInfosPratiques, #iContactCoordonnees{
+		width: 45%;
+		display: inline-block; /* c'est là qu'on passe en 2 colonnes */
+		vertical-align: top;
+	}
+	#iContactCoordonnees:before{
+		content: none; /* on annule le trait avec le § précédent puisqu'on passe sur 2 colonnes */
+	}
 	/* FB et G+ */
-	.cColGauche p:nth-of-type(7), .cColGauche p:nth-of-type(8){
+	#iContactCoordonnees p:nth-of-type(7), #iContactCoordonnees p:nth-of-type(8){
 		display: inline-block;
 		height: 4rem;
 		width: 4rem;
 	}
-
-	/* intro du form. de contact "Envoyez-nous un message ... " */
-	.cColDroite h4{
-		font-size: 2.5rem;	/* old 2.35rem */
+	#iContactPlan p img{
+		top: -.58rem;
+		/* cf ctrl+F #iTelBandeau img{ pour plus d'explications */
 	}
 
-	/* tailles des champs saisis dans le formulaire et des messages associés */
+	/*      page PharmaDeGarde      */
 
-	.cChampForm input, .cChampForm textarea{
-		font-size: 2.5rem; /* old 2.3 */
-	}
+	/* icône de guidage GPS */
+	/* cf ctrl+F #iPdGplan img{ */
 
-	/*           page humour           */
-	/* "Merci à ..." */
-	.cHumour p:last-of-type {
-		font-size: 2rem;				/* old : 1.8rem	*/
-	}
-
-	/* Footer */
-
-	footer section:first-of-type{
-		font-size: 1.8rem; /* old 1.5 */
-	}
-
-	footer section:first-of-type p{
-		padding: 1.5rem 1.5rem; /* old .5rem 1rem */
+	/* Mentions légales */
+	#iMentionsLegales img{
+		width: 12%;
 	}
 }
 
-/* 																									1600 px		*/
+/* 																															1600 px	*/
 @media screen and (min-width: 1600px){
 
-	.cBraille{
-		display: none;
+	#iTelBandeau img, #iContactTel img{
+		display: none; /* sur un écran d'ordi, on n'affiche plus l'icône clicIndex */
+	}
+}
+
+/* 																														impression	*/
+@media print{
+
+	/*********************************  GENERIQUE  ********************************/
+
+	body{
+/*		width: auto!important;
+		margin: auto!important;*/
+		background-color: white!important;
+		color: black!important;
+	}
+	p, a, h1, h2, h3, h4, h5, h6, ul, ol, span, div{
+		color: black!important;
+		/*margin: auto!important;*/
+	}
+	p{
+		orphans: 3; /* pas de ligne seule en bas  */
+		widows:  3; /* pas de ligne seule en haut */
+	}
+	ul, ol{
+		page-break-inside: avoid; /* pas de saut de page dans ces éléments */
+	}
+	h1, h2, h3{
+		page-break-after: avoid; /* pas de saut de page après ces éléments */
 	}
 
-	/* page Index - <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	.cIntro h3, .cVignettes h3 {
-		display: none;	/* Etat actuel d'ouverture ... et Services proposés ... */
-	}
+	/* ça ne me sert pas, mais c'est juste bon à savoir ! */
+/*	a[href]:after{
+		content: " (" attr(href) ")"; /* affichage des url des liens
+	}*/
 
-	/* page Contact <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	.cFormContact h3{
-		display: none;
-	}
+	/********************************  SPECIFIQUE  ********************************/
 
-	body, h3{
-		font-size: 2.5rem; /* old 2.3 */
-	}
-	/* on agrandit un peu la croix */
-	header section img{
-		width: 16%;
-		top: 2rem;
-		left: 2rem;
-	}
+	/************ bandeau du haut ************/
 
-	/* titre : Pharmacie ... */
+	header section{
+		padding: 0 0 25%;
+	}
+	body, h2, p.cJour{
+		font-size: 1.8rem; /* taille par défaut de toutes les polices + les h2 et les p.cJour */
+	}
+	#iLogoCroix{
+		width: 14%;						/* taille et position de la croix */
+		display: block;
+		top: 0;
+	}
 	h1{
-		font-size: 4.5rem;	/* old 3.8 */
-		top: 8%;			/* old 7% */
-		left: 21%;			/* old 16% en mobile */
+		font-size: 7rem;				/* titre de la page : Nom de la pharmacie */
+		top: 0;
+		left: 25%;
+	}
+	h1+strong{
+		font-size: 3.5rem;				/* sous-titre de la page : adresse ... */
+		top: 40%;
+		left: 35%;
+	}
+	#iTelBandeau{
+		font-size: 3.5rem;				/* n° de telephone */
+		top: 60%;
+		left: 35%;
+	}
+	#iTelBandeau img, #iContactTel img{
+		display: none; 					/* on n'affiche pas l'icône clicIndex */
 	}
 
-	/* sous-titre : Nantes ... */
-	h2{
-		font-size: 2.8rem;	/* old 2.5 */
-		left: 21%;			/* old 16% en mobile */
+
+	/********************* page Index ********************/
+
+	#iIndex article{
+		width: 33.33%;  /* on met 3 vignettes */
+		float: left;    /*     en largeur     */
 	}
 
-	#iTelIndex{
-		font-size: 2.8rem;	/* old 2.5 */
+	/******************** page Contact *******************/
+
+	#iContactInfosPratiques, #iContactCoordonnees{
+		width: 45%;
+		display: inline-block;  /* c'est là qu'on passe en 2 colonnes */
+		vertical-align: top;
 	}
 
-	/* page Index : on passe en 2 vignettes en largeur */
-	.cVignettes article{
-		width: 33.33%;
+	/*************** page Mentions légales ***************/
+
+	#iMentionsLegales div{
+		page-break-inside: avoid; /* pas de saut de page au milieu d'un div */
 	}
-
-
-	/* page connexion : espace au-dessus du lien 'inscription' */
-	.cConnexionInscription p:first-of-type{
-	padding-bottom: 2rem;
-}
-
-	/* Formulaire de contact */
-
-	/* "la saisie de tous les champs ..." */
-	.cFormContact section span:first-of-type{
-		font-size: 1.7rem; 		/* old 1.5 */
-	}
-
-	/* FB et G+ */
-	.cColGauche p:nth-of-type(7), .cColGauche p:nth-of-type(8){
-		display: inline-block;
-		height: 4rem;
-		width: 4rem;
-	}
-
-	/* intro du form. de contact "Envoyez-nous un message ... " */
-	.cColDroite h4{
-		font-size: 2.5rem;	/* old 2.35rem */
-	}
-
-	/* tailles des champs saisis dans le formulaire et des messages associés */
-
-	.cChampForm input, .cChampForm textarea{
-		font-size: 2.5rem; /* old 2.3 */
-	}
-
-	/*           page humour           */
-	/* "Merci à ..." */
-	.cHumour p:last-of-type {
-		font-size: 2rem;				/* old : 1.8rem	*/
-	}
-
-	/* Footer */
-
-	footer section:first-of-type{
-		font-size: 1.8rem; /* old 1.5 */
-	}
-
-	footer section:first-of-type p{
-		padding: 1.5rem 1.5rem; /* old .5rem 1rem */
-	}
-}
-
-/* 																									braille 		*/
-@media braille{
-
-	/* page Index - <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	/* volontairement je ne donne pas d'instruction css pour effacer le titre h3 des services proposés */
-	/* puisque c'est utile en braille */
-	.cIntro h3{
-		display: none;	/* Etat actuel d'ouverture ... et Services proposés ... */
-	}
-
-	/* page Contact <h3> ajouté pour la validation W3C mais non affiché, sauf en braille */
-	.cFormContact h3{
-		display: none;
+	#iMentionsLegales img{
+		width: 17%;
 	}
 }
