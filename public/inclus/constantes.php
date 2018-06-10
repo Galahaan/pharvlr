@@ -4,7 +4,7 @@
 //
 //     - tapette.php
 //     - /erreurs/erreur-....php     (401, 403, 404, 500, index)
-//     - .htaccess de la racine
+//     - .htaccess de la racine      => vérifier que le .htaccess du serveur est bien identique
 //
 
 
@@ -21,7 +21,7 @@ define("GOOGLE_VALIDATION_CODE", "mhjYrgfrE7d0TraYlzb7il--H1UDZpC47s1hw92GePw");
 
 // Nom de la pharmacie
 define("NOM_PHARMA"        , "Pharmacie Le Reste");      // dans <title> + bandeau
-define("LOC_PHARMA_1"      , " à ");                     // que dans <title>               60 car. max pour <title> !
+define("LOC_PHARMA_1"      , ", ");                      // que dans <title>               60 car. max pour <title> !
 define("LOC_PHARMA_2"      , "Saint-Joseph de Porterie, Nantes");   // dans <title> + bandeau
 
 // Adresse de la pharmacie
@@ -96,7 +96,7 @@ define("PHIE_SIRET", "81248009300010");
 define("PHIE_APE", "4773Z");
 
 // URL de la pharmacie
-define("PHIE_URLC", "www.pharmacielereste.fr");
+define("PHIE_URLC", "pharmacielereste.fr");
 
 // Hébergeur du site
 define("PHIE_HBG_COORD", "OVH - 2 rue Kellermann - BP 80157 - 59053 Roubaix cedex 1");

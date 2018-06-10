@@ -17,7 +17,7 @@ RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 # mais c'est quand même une erreur 403 qui est levée dans tous les cas ... je ne comprends pas !
 # Pour remédier au pb, j'ai trouvé qu'il fallait écrire le chemin complet :
 #
-DirectoryIndex index.php https://www.bigouig.fr/erreurs/erreur-index.php
+DirectoryIndex index.php https://www.pharmacielereste.fr/erreurs/erreur-index.php
 
 
 #
@@ -32,7 +32,7 @@ Options -Indexes
 #
 # Pour l'instant ça fonctionne, mais, comme pour le DirectoryIndex ci-dessus,
 # si jamais on rencontre des problèmes, il suffira peut-être d'écrire le chemin complet, au lieu du relatif :
-# ErrorDocument 401 https://www.bigouig.fr/erreurs/erreur-401.php
+# ErrorDocument 401 https://www.pharmacielereste.fr/erreurs/erreur-401.php
 #
 ErrorDocument 401 /erreurs/erreur-401.php
 ErrorDocument 403 /erreurs/erreur-403.php
