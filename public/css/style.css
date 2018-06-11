@@ -692,7 +692,7 @@ sub{
 
 /* organisation des textes et des images associées : proportion texte / image */
 #iGammesProd article div p{
-	width: 55%;
+	width: 52%;
 }
 #iGammesProd article div:not(.cImageDeco) img{
 	width: 40%;
