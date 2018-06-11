@@ -48,9 +48,9 @@ $_SESSION['bot']['do1'] = $do1;
 $_SESSION['bot']['ip2'] = $ip2;
 $_SESSION['bot']['do2'] = $do2;
 
-$_SESSION['bot']['url']        = "<?= PHIE_URLC ?>";
-$_SESSION['bot']['mailDest']   = "<?= MAIL_DEST_CLR ?>";
-$_SESSION['bot']['mailExp']    = "<?= ADR_EXP_HBG ?>";
+$_SESSION['bot']['url']        = PHIE_URLC;
+$_SESSION['bot']['mailDest']   = MAIL_DEST_CLR;
+$_SESSION['bot']['mailExp']    = ADR_EXP_HBG;
 
 
 // retour vers l'accueil

@@ -6,6 +6,9 @@
 //     - /erreurs/erreur-....php     (401, 403, 404, 500, index)
 //     - .htaccess de la racine      => vérifier que le .htaccess du serveur est bien identique
 //
+// 
+// et penser à supprimer l'affichage des erreyrs dans entete.php : ini_set("display_errors", 1);
+//
 
 
 // code de validation, pour pouvoir utiliser, grâce à un compte Google, ses outils de suivi de référencement
