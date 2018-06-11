@@ -82,8 +82,8 @@ sup, sub{
 	padding-bottom: 5.8%;
 }
 /* on utilise cette classe pour que des phrases, constituées de plusieurs balises, soient bien sur une seule ligne. */
-/* (ex. <p class='cIL'>Le </p><h2 class='cIL'>ciel </h2><p class='cIL'>est bleu.</p>) */
-.cIL{
+/* (ex. <p class='cInLi'>Le </p><h2 class='cInLi'>ciel </h2><p class='cInLi'>est bleu.</p>) */
+.cInLi{
 	display: inline;
 }
 
@@ -211,11 +211,16 @@ nav#iNavigation{
 /****************************************************           page index          ****************************************************/
 /***************************************************************************************************************************************/
 .cSectionContour#iIndex{
-	padding-left: 0;
-	padding-right: 0;     /* pour annuler, exceptionnellement, les paddings de .cSectionContour */
+	padding-left: 0;      /* on annule, exceptionnellement, les paddings de .cSectionContour   */
+	padding-right: 0;     /* pour que les vignettes prennent toute la largeur de la la section */
 }
-#iIndex p:first-child{
+#iIndex p:first-of-type{
 	padding-bottom: 5.8%; /* 'la pharmacie est actuellement ...' */
+}
+#iIndex div{
+	padding-right: 2%;    /* pour la petite introduction au-dessus des vignettes */
+	padding-left: 2%;     /* (mêmes paddings latéraux que pour cSectionContour)  */
+	text-align: justify;
 }
 #iIndex article{
 	position: relative; /* pour que les <a> et les <img> soient superposés */
