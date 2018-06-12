@@ -21,53 +21,59 @@
 
 
 
-/* fond de la page                                 (body)               :  #575757  gris foncé                   */
-/*  + fond du bandeau en cas de chargement lent    (header section)                                              */
-
-/* fond de la zone du site                         (main)               :  white                                 */
-
-/* textes dans le bandeau du haut (titres + tel)                        :  #951A80  mauve                        */
-/*  + lignes fines dans les formulaires                                                                          */
-/*  + lignes gammes de produits                                                                                  */
-
-/* menu de navigation, fond                                             :  #ADADAD  gris clair                   */
-/* menu de navigation, textes                                           :  white                                 */
-
-/* bandeau de connexion, fond                                           :  #ADADAD  gris clair                   */
-/* bandeau de connexion, textes                                         :  black                                 */
-
-/* vignettes accueil, fond                         (accueil)            :  #94C11D  vert anis                    */
-/* vignettes accueil, textes                       (accueil)            :  white                                 */
-/* pharma ouverte                                  (accueil)            :  #4DBC1C  vert 'fluo'                  */
-/* pharma fermée                                   (accueil)            :  #FF4141  rouge                        */
-/* pharma ouvre dans ...                           (accueil)            :  black                                 */
-/* pharma ferme dans ...                           (accueil)            :  #FF4141  rouge      (#F29200  orange) */
-
-/* bouton de validation, fond                                           :  #7B6A57  marron                       */
-/*  + tous les liens 'normaux' du site                                                                           */
-/*      - tel + mail                               (contact)                                                     */
-/*      - inscription                              (connexion)                                                   */
-/*      - connexion                                (inscription)                                                 */
-/*      - mode d'emploi                            (prepaOrdo)                                                   */
-/*      - organismes partenaires                   (menleg)                                                      */
-/* bouton de validation, hover                                          :  #F29200  orange                       */
-/*  + hover sur tous les liens 'normaux' du site                                                                 */
-
-/* heure actuelle                                  (horaires)           :  #D84591  fuschia                      */
-/*  + créneau actuel, texte                        (horaires)                                                    */
-/*  + trait vertical heure actuelle                (horaires)                                                    */
-/* créneaux ouverture, fond                        (horaires)           :  rgba(148, 193, 29, .2)                */
-/* créneau actuel ouverture, fond                  (horaires)           :  rgba(148, 193, 29, .5)                */
-
-/* § alternés                                                                                                    */
-/*      - 1 produit sur 2                          (gammesProduits)     :  #F8F8F8  gris très clair              */
-/*      - titres h4                                (menleg)             :  #E7FBE1  vert très clair              */
-
-/* footer 1 fond (menleg)                                               :  white                                 */
-/* footer 1 texte                                                       :  standard                              */
-
-/* footer 2 fond (éditeur)                                              :  #575757  gris foncé                   */
-/* footer 2 texte                                                       :  white                                 */
+/* fond de la page                                 (body)               :  ~575757  rgb(87, 87, 87)     gris       */
+/*  + fond du bandeau en cas de chargement lent    (header section)                                                */
+/*                                                                                                                 */
+/* fond de la zone du site                         (main)               :  white                                   */
+/*                                                                                                                 */
+/* textes dans le bandeau du haut (titres + tel)                        :  ~951A80  rgb(149, 26, 128)   mauve      */
+/*  + lignes fines dans les formulaires                                                                            */
+/*  + lignes gammes de produits                                                                                    */
+/*                                                                                                                 */
+/* menu de navigation, fond                                             :  ~ADADAD  rgb(173, 173, 173)  gris       */
+/* menu de navigation, textes                                           :  white                                   */
+/*                                                                                                                 */
+/* bandeau de connexion, fond                                           :  ~ADADAD  rgb(173, 173, 173)  gris       */
+/* bandeau de connexion, textes                                         :  black                                   */
+/*                                                                                                                 */
+/* vignettes accueil, fond                         (accueil)            :  ~94C11D  rgb(148, 193, 29)   vert       */
+/* vignettes accueil, textes                       (accueil)            :  white                                   */
+/* pharma ouverte                                  (accueil)            :  ~4DBC1C  rgb(77, 188, 28)    vert       */
+/* pharma ouvre dans ...                           (accueil)                                                       */
+/* pharma fermée                                   (accueil)            :  ~FF4141  rgb(255, 65, 65)    rouge      */
+/* pharma ferme dans ...                           (accueil)                                                       */
+/*                                                                                                                 */
+/* messages d'erreur formulaires       (prepaComm + prepaOrdo + contact):  ~FF0000  rgb(255, 0, 0)      rouge      */
+/*  + n'oubliez pas ...                            (prepaOrdo)                                                     */
+/*                                                                                                                 */
+/* bouton de validation, fond                                           :  ~7B6A57  rgb(123, 106, 87)   marron     */
+/*  + tous les liens 'normaux' du site                                                                             */
+/*      - tel + mail                               (contact)                                                       */
+/*      - inscription                              (connexion)                                                     */
+/*      - connexion                                (inscription)                                                   */
+/*      - mode d'emploi                            (prepaOrdo)                                                     */
+/*      - organismes partenaires                   (menleg)                                                        */
+/* bouton de validation, hover                                          :  ~F29200  rgb(242, 146, 0)    orange     */
+/*  + hover sur tous les liens 'normaux' du site                                                                   */
+/*                                                                                                                 */
+/* heure actuelle                                  (horaires)           :  ~D84591  rgb(216, 69, 145)   fuschia    */
+/*  + créneau actuel, texte                        (horaires)                                                      */
+/*  + trait vertical heure actuelle                (horaires)                                                      */
+/* créneaux ouverture, fond                        (horaires)           :  rgba(148, 193, 29, .2)       vert       */
+/* créneau actuel ouverture, fond                  (horaires)           :  rgba(148, 193, 29, .5)       vert       */
+/*                                                                                                                 */
+/* ordo en ligne, mode emploi, fond                (prepaOrdo)          :  ~5B5B5B  rgb(91, 91, 91)     gris       */
+/* ordo en ligne, mode emploi, Nota Bene           (prepaOrdo)          :  ~F29200  rgb(242, 146, 0)    orange     */
+/*                                                                                                                 */
+/* § alternés                                                                                                      */
+/*      - 1 produit sur 2                          (gammesProduits)     :  ~F8F8F8  rgb(248, 248, 248)  gris       */
+/*      - titres h3                                (menleg)             :  ~E7FBE1  rgb(231, 251, 225)  vert       */
+/*                                                                                                                 */
+/* footer 1 fond (menleg)                                               :  white                                   */
+/* footer 1 texte                                                       :  black                                   */
+/*                                                                                                                 */
+/* footer 2 fond (éditeur)                                              :  ~575757  rgb(87, 87, 87)     gris       */
+/* footer 2 texte                                                       :  white                                   */
 
 
 /* NB : pour les liens, il faut respecter cet ordre de déclaration :           */
@@ -81,7 +87,7 @@ a{
     color: black;
 }
 body{
-    background-color: #575757;
+    background-color: rgb(87, 87, 87);
 
     /* ligne associée à l'import de la police Google fonts */
     font-family: 'Advent Pro', sans-serif;
@@ -111,14 +117,14 @@ main{
 /*********************************      pages connexion, inscription, contact, prepaOrdo, menleg      **********************************/
 /***************************************************************************************************************************************/
 #iConnexionInscription a, #iInscription a, #iContactTel a, #iContactMail a, #iOrdoLienModeEmploi a, #iMentionsLegales a{
-    color: #7B6A57;
+    color: rgb(123, 106, 87);
     text-decoration: underline;
 }
 /* hover des liens précédents */
 #iConnexionInscription a:hover, #iInscription a:hover, #iContactTel a:hover, #iContactMail a:hover, #iOrdoLienModeEmploi a:hover, #iMentionsLegales a:hover{
-    color: #F29200;
+    color: rgb(242, 146, 0);
     font-weight: 700;
-    text-decoration: none;
+    text-decoration: none;   /* ça permet de mieux marquer la différence (accessibilité) */
 }
 
 /***************************************************************************************************************************************/
@@ -126,10 +132,10 @@ main{
 /***********************************     contact, connexion, inscription, ordonnance et commande     ***********************************/
 /***************************************************************************************************************************************/
 #iContactCoordonnees:before, #iContactPlan:before, #iContactFormulaire:before, #iConnexionInscription:before{
-    background-color: #951A80; /* petit trait horizontal entre les § */
+    background-color: rgb(149, 26, 128); /* petit trait horizontal entre les § */
 }
 .cChampForm{
-    border-top: .1rem solid #951A80; /* lignes fines entre les champs */
+    border-top: .1rem solid rgb(149, 26, 128); /* lignes fines entre les champs */
 }
 /* Visiblement, le font-family du body n'est pas pris en compte dans le textarea, */
 /* on les redéfinit donc plus spécifiquement ici :                                */
@@ -137,26 +143,26 @@ main{
     font-family: sans-serif;
 }
 sub{
-    color: red; /* mess. d'erreurs */
+    color: rgb(255, 0, 0); /* mess. d'erreurs */
 }
 .cBoutonOk button{
-    background-color: #7B6A57; /* déco du bouton de validation */
+    background-color: rgb(123, 106, 87); /* déco du bouton de validation */
     color: white;
     font-weight: 400;
 }
 .cBoutonOk button:hover{
-    background-color: #F29200;
+    background-color: rgb(242, 146, 0);
 }
 
 /***************************************************************************************************************************************/
 /***************************************************         bandeau du haut         ***************************************************/
 /***************************************************************************************************************************************/
 header section{
-    background-color: #575757; /* dans le cas où l'image ne peut être chargée, ça fait un fond par défaut */
+    background-color: rgb(87, 87, 87); /* dans le cas où l'image ne peut être chargée, ça fait un fond par défaut */
 }
 h1, h1+strong, #iTelBandeau, #iTelBandeau a{
     font-family: 'Advent Pro', sans-serif; /* titre + sous-titre + tel */
-    color: #951A80;                        /* (police différente uniquement pour le bandeau du haut) */
+    color: rgb(149, 26, 128);                        /* (police différente uniquement pour le bandeau du haut) */
     font-weight: 700;
 }
 
@@ -164,7 +170,7 @@ h1, h1+strong, #iTelBandeau, #iTelBandeau a{
 /********************************       menu de navigation       *******************************/
 /***********************************************************************************************/
 nav#iNavigation{
-    background-color: #94C11D;
+    background-color: rgb(148, 193, 29);
 }
 nav#iNavigation a{
     color: white;
@@ -177,7 +183,7 @@ nav#iNavigation a{
 /**********************                bandeau de connexion               **********************/
 /***********************************************************************************************/
 #iBandeauConnex{
-    background-color: #ADADAD; /* bandeau de connexion */
+    background-color: rgb(173, 173, 173); /* bandeau de connexion */
     color: black; /* nom de la personne connectée */
 }
 #iLienConnex a{
@@ -194,19 +200,19 @@ nav#iNavigation a{
     font-weight: 700;
 }
 #iIndex .cOuverte{
-    color: #4DBC1C;
+    color: rgb(77, 188, 28);
 }
 #iIndex .cFermee{
-    color: #FF4141;
+    color: rgb(255, 65, 65);
 }
 #iIndex .cOuvreDans{
     color: black;
 }
 #iIndex .cFermeDans{
-    color: #FF4141;
+    color: rgb(255, 65, 65);
 }
 #iIndex article a{
-    background-color: #94C11D;
+    background-color: rgb(148, 193, 29);
     color: white;
     font-weight: 700;
 }
@@ -215,7 +221,7 @@ nav#iNavigation a{
 /***************************************************          page horaires          ***************************************************/
 /***************************************************************************************************************************************/
 .cHeureDuJour{
-    color: #D84591; /* l'heure qu'il est */
+    color: rgb(216, 69, 145); /* l'heure qu'il est */
 }
 .cSemaine p.cJour, .cSamedi p.cJour{
     font-weight: 400;  /* nom des jours (p.cJour) en 'normal' */
@@ -229,7 +235,7 @@ nav#iNavigation a{
 #iHorairesTableau #iHorairesAujourdhui div, #iHorairesTableau #iHorairesAujourdhui p.cJour{
     background-color: rgba(148, 193, 29, .5);
     font-weight: 700;
-    color: #D84591;
+    color: rgb(216, 69, 145);
 }
 /* on ne veut pas mettre le jour actuel et le tiret en fond vert */
 .cSemaine p.cJour, .cSamedi p.cJour, .cSemaine .cTiret,
@@ -252,7 +258,7 @@ nav#iNavigation a{
     background-color: rgba(255, 255, 255, 0); /* en fait, seul importe le 0 final, ie 'transparence totale'. */
     /* NB: j'avais testé 'opacity: 0;' => mais TOUT disaparaît, y compris la border */
 
-    border-left: solid #D84591 2px;
+    border-left: solid rgb(216, 69, 145) 2px;
 }
 #iHorairesTableau #iHorairesAujourdhui .cEffacerTrait, #iHorairesTableau article .cEffacerTrait{
     background-color: rgba(255, 255, 255, 0); /* en fait, seul importe le 0 final, cf NB ci-dessus */
@@ -277,11 +283,11 @@ nav#iNavigation a{
 /**************************************                  page prepaOrdonnance                     **************************************/
 /***************************************************************************************************************************************/
 .cCouleurRouge{
-    color: red; /* N'oubliez pas l'original de l'ordonnance ... */
+    color: rgb(255, 0, 0); /* N'oubliez pas l'original de l'ordonnance ... */
     font-weight: 700;
 }
 #iOrdoModeEmploi{
-    background-color: #5B5B5B; /*  § Mode d'emploi  */
+    background-color: rgb(91, 91, 91); /*  § Mode d'emploi  */
     color: white;
 }
 #iOrdoModeEmploi span{
@@ -289,28 +295,28 @@ nav#iNavigation a{
     text-decoration: underline;
 }
 #iOrdoModeEmploi ul li p:nth-of-type(2){
-    color: orange;       /* message pour l'accès impossible aux */
-    font-weight: 700;    /* fichiers sur certains smartphones   */
+    color: rgb(242, 146, 0);  /* message pour l'accès impossible aux */
+    font-weight: 700;         /* fichiers sur certains smartphones   */
 }
 
 /***************************************************************************************************************************************/
 /*********************************************          page gammes de produits          ***********************************************/
 /***************************************************************************************************************************************/
 #iGammesProd article h3{
-    color: #951A80;               /* titres placés sur les images */
+    color: rgb(149, 26, 128);               /* titres placés sur les images */
 }
 #iGammesProd article div:nth-child(2n+1){
-    background-color: #F8F8F8;    /* alternance de gris et de blanc entre les différents produits d'un même § */
+    background-color: rgb(248, 248, 248);    /* alternance de gris et de blanc entre les différents produits d'un même § */
 }
 #iGammesProd article .cImageDeco{
-    border: 0.3rem solid #951A80; /* bordure de l'image */
+    border: 0.3rem solid rgb(149, 26, 128); /* bordure de l'image */
 }
 
 /***************************************************************************************************************************************/
 /************************************************        page mentions légales        **************************************************/
 /***************************************************************************************************************************************/
 #iMentionsLegales h3{
-    background-color: #E7FBE1; /* fond du § titre */
+    background-color: rgb(231, 251, 225); /* fond du § titre */
 }
 #iMentionsLegales .gauche{
     font-weight: 700;          /* mots de la colonne de gauche */
@@ -321,9 +327,9 @@ nav#iNavigation a{
 /****************************************************             Footer            ****************************************************/
 /***************************************************************************************************************************************/
 footer section:first-of-type{
-    background-color: white; /* footer 1ère section : Mentions légales */
+    background-color: white;   /* footer 1ère section : Mentions légales */
 }
 footer section:last-of-type{
-    background-color: #575757; /* footer 2ème section : Editeur du site */
+    background-color: rgb(87, 87, 87); /* footer 2ème section : Editeur du site */
     color: white;
 }
