@@ -23,9 +23,12 @@ define("GOOGLE_VALIDATION_CODE", "mhjYrgfrE7d0TraYlzb7il--H1UDZpC47s1hw92GePw");
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // Nom de la pharmacie
-define("NOM_PHARMA"        , "Pharmacie Le Reste");      // dans <title> + bandeau
-define("LOC_PHARMA_1"      , ", ");                      // que dans <title>               60 car. max pour <title> !
-define("LOC_PHARMA_2"      , "Saint-Joseph de Porterie, Nantes");   // dans <title> + bandeau
+// Attention : le <title> ne doit pas dépasser 60 / 65 caractères.
+//             or il commence par le nom de chaque page, et le + long est 'Informations et conseils' = 25
+//             + la virgule et l'espace                                                                 2
+define("NOM_PHARMA"        , "Pharmacie Le Reste");               // dans <title> + bandeau            18
+define("LOC_PHARMA_TTL"    , ", Saint-Joseph, Nantes");           // dans <title>                      22
+define("LOC_PHARMA_BND"    , "Saint-Joseph de Porterie, Nantes"); // dans bandeau
 
 // Adresse de la pharmacie
 define("ADR_PHARMA_L1"     , "21 rue du Bêle");
