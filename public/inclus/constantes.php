@@ -25,11 +25,13 @@ define("GOOGLE_VALIDATION_CODE", "mhjYrgfrE7d0TraYlzb7il--H1UDZpC47s1hw92GePw");
 // Nom de la pharmacie
 // Attention : le <title> ne doit pas dépasser 60 / 65 caractères.
 //             or il commence par le nom de chaque page, cf à la fin de ce fichier,
-//                                                 et le + long est 'Informations & conseils' = 23
-//                                               + la virgule et l'espace                        2
-define("NOM_PHARMA"        , "Pharmacie Le Reste");               // dans <title> + bandeau     18
-define("LOC_PHARMA_TTL"    , ", Saint-Joseph, Nantes");           // dans <title>               22
-define("LOC_PHARMA_BND"    , "Saint-Joseph de Porterie, Nantes"); // dans bandeau
+//                                                     et le + long est 'Informations & conseils' = 23
+//                                                   + la virgule et l'espace                        2
+define("NOM_PHARMA"        , "Pharmacie Le Reste");                   // dans <title> + bandeau     18
+define("LOC_PHARMA_TTL"    , ", Saint-Joseph, Nantes");               // dans <title>               22
+define("LOC_PHARMA_TTL_IDX", " à Saint-Joseph de Porterie, Nantes");  // dans <title> de l'index seulement
+
+define("LOC_PHARMA_BND"    , "Saint-Joseph de Porterie, Nantes");     // dans bandeau
 
 // Adresse de la pharmacie
 define("ADR_PHARMA_L1"     , "21 rue du Bêle");
@@ -320,7 +322,7 @@ define('CONTACT_INFOS_PRATIQUES',
 
 // Tout est utilisé dans 'fonctions / pageCourante()',
 // sauf PAGE_ACCUEIL qui est aussi dans entete.php, avec son flag associé.
-define("PAGE_ACCUEIL" , "Accueil & Services");
+define("PAGE_ACCUEIL" , "Accueil");
 define("PAGE_HORAIRES", "Horaires");
 define("PAGE_EQUIPE"  , "Équipe");
 define("PAGE_CONTACT" , "Contact");
