@@ -560,6 +560,11 @@ function pageCourante( $request_uri ){
 			$titrePage = TTL_MENLEG;
 			break;
 
+		case "aide":
+			$nomPage   = NOM_AIDE;
+			$titrePage = TTL_AIDE;
+			break;
+
 		case "connexion":
 			$nomPage   = NOM_CONNEX;
 			$titrePage = TTL_CONNEX;
@@ -568,11 +573,6 @@ function pageCourante( $request_uri ){
 		case "inscription":
 			$nomPage   = NOM_INSCRIP;
 			$titrePage = TTL_INSCRIP;
-			break;
-
-		case "aide":
-			$nomPage   = NOM_AIDE;
-			$titrePage = TTL_AIDE;
 			break;
 
 		default :
@@ -624,7 +624,7 @@ $page = ltrim($request_uri, '/');
 $page = rtrim($page, 'hp.');
 
 $description = "";
-$robots      = "index, follow, all";
+$robots      = BOTS_DEFT;
 $refresh     = "";                        // initialisations
 $focus       = "";
 $cdn         = "";
@@ -683,6 +683,10 @@ $cdn         = "";
 			$description = DESC_MENLEG;
 			break;
 
+		case "aide":
+			$description = DESC_AIDE;
+			break;
+
 		case "connexion":
 			$robots      = BOTS_CONNEX;
 			break;
@@ -694,7 +698,6 @@ $cdn         = "";
 
 		default :                        // si ce n'est aucun des cas précédents, ou si la page '/index.php'
 			$description = DESC_INDEX;   // n'est pas précisée dans l'URL => on est sur la page index !
-			$robots      = "";
 			$refresh     = "meta http-equiv='refresh' content='" . REFRESH . "' />";
 	}
 	return ['description' => $description, 'robots' => $robots, 'refresh' => $refresh, 'focus' => $focus, 'cdn' => $cdn];
