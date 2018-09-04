@@ -1,6 +1,6 @@
 <?php
 
-include('inclus/entete.php');
+include('inclus/enteteP.php');
 
 // Pour des raisons de sécurité, dans le cas de l'envoi d'un mail, je teste si la page
 // courante n'a pas été usurpée; je suis donc, das ce cas, obligé de l'écrire EN DUR :
@@ -8,7 +8,7 @@ include('inclus/entete.php');
 define("PAGE_EN_COURS", "contact.php");
 
 // Si le formulaire vient d'être validé, et avant de savoir si on va envoyer le mail, on "nettoie" les champs :
-if( isset($_POST['bouton']) ){
+if( isset($_POST['valider']) ){
 
 	// Civilité
 
@@ -28,12 +28,10 @@ if( isset($_POST['bouton']) ){
 
 	// Mail
 
-	// "nettoie" la valeur utilisateur :
-	$adrMailClient = filter_var($_POST['adrMailClient'], FILTER_SANITIZE_EMAIL);
+	$adrMailClient = $_POST['adrMailClient'];
 
-	// teste la NON validité du format :
-	if( ! filter_var($adrMailClient, FILTER_VALIDATE_EMAIL) ){
-		$erreurs['adrMailClient'] = "(format incorrect)"; 
+	if( ! mailValide($adrMailClient) ){
+		$erreurs['adrMailClient'] = "(mail invalide)"; 
 	};
 
 	// Message
@@ -47,11 +45,13 @@ if( isset($_POST['bouton']) ){
 	//     quand même un retour chariot, ce qui ajoute 2 caractères ('invisibles').
 
 	if( (strlen($messageClientTxt) < NB_CAR_MIN_MESSAGE) || (strlen($messageClientTxt) > NB_CAR_MAX_MESSAGE ) ){
-		$erreurs['message'] = "(entre " . NB_CAR_MIN_MESSAGE . " et " . NB_CAR_MAX_MESSAGE . " caractères)";
+		$erreurs['message'] = "(de " . NB_CAR_MIN_MESSAGE . " à " . NB_CAR_MAX_MESSAGE . " caractères)";
 	}
 	// on se donne une version du message en format HTML (plus sympa à lire pour la pharmacie)
 	$messageClientHtml = "<b style='font-size: 16px;'>" . nl2br($messageClientTxt) . "</b>";
 }
+
+include('inclus/enteteH.php');
 ?>
 	<main id='iMain'>
 		<nav class='cBraille'>
@@ -101,7 +101,7 @@ if( isset($_POST['bouton']) ){
 
 		<section id='iContactFormulaire' class='cSectionContour'><h2>Envoyer un message ...</h2>
  
-		<?php if( isset($_POST['bouton']) && !isset($erreurs)) : ?>
+		<?php if( isset($_POST['valider']) && !isset($erreurs)) : ?>
 
 			<?php
 			//    le formulaire a été rempli  ET  s'il n'y a pas d'erreurs
@@ -124,7 +124,7 @@ if( isset($_POST['bouton']) ){
 			// sauf que comme on est sur un serveur mutualisé, on ne peut pas modifier 'locale', donc ça restait en anglais !
 			//
 			// d'où l'utilisation d'une fonction à moi :
-			$date = "Semaine " . date("W") . " - " . dateFr() . " - " . heureActuelle(H);
+			$date = "Semaine " . date('W') . " - " . dateFr() . " - " . heureActuelle('H');
 
 			// ===============  IP du client  =============== //     (3 possibilités)
 
@@ -230,10 +230,6 @@ if( isset($_POST['bouton']) ){
 				"<style type='text/css'>" .
 						"#iContactInfosPratiques, #iContactCoordonnees, #iContactPlan," .
 						"#iContactFormulaire::before, #iContactFormulaire h2 { display: none }" .
-				"</style>";
-			$effaceContenuPage .=
-				"<style type='text/css'>" .
-						"#iContactFormulaire { width: 90% }" .
 				"</style>";
 			// puis on affichera le message de confirmation
 			// (on sait de quoi on parle puisque 'Contact' est souligné dans le menu de nav.)
@@ -373,7 +369,7 @@ if( isset($_POST['bouton']) ){
 				</div>
 				<div class='cChampForm'>
 					<label for='iMessageTextarea'>Message</label>
-						<textarea rows='4' minlength='<?= NB_CAR_MIN_MESSAGE_HTM ?>' maxlength='<?= NB_CAR_MAX_MESSAGE_HTM ?>' id='iMessageTextarea' name='message' required placeholder='>'
+						<textarea rows='8' minlength='<?= NB_CAR_MIN_MESSAGE_HTM ?>' maxlength='<?= NB_CAR_MAX_MESSAGE_HTM ?>' id='iMessageTextarea' name='message' required placeholder='...'
 							<?php	if( isset($erreurs['message']) && $focusErreurMis == false ){
 										echo " autofocus";
 										$focusErreurMis = true;
@@ -382,8 +378,8 @@ if( isset($_POST['bouton']) ){
 						><?= isset($messageClientTxt) ? $messageClientTxt : ""?></textarea>
 					<?php if( isset($erreurs['message']) ) { echo "<sub>" . $erreurs['message'] . "</sub>"; } ?>
 				</div>
-				<div class='cBoutonOk'>
-					<button name='bouton'>Envoyer</button>
+				<div id='iValider'>
+					<button class='cDecoBoutonValid' name='valider'>Envoyer</button>
 				</div>
 			</form>
 		<?php endif ?>

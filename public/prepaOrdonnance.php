@@ -1,13 +1,12 @@
 <?php
 
+include('inclus/enteteP.php');
+
 // Si le nom de la page est saisi directement dans la barre d'adresse, alors
 // que la personne ne s'est pas encore connectée => retour accueil direct !
-session_start();
 if( !isset($_SESSION['client']) ){
 	header('Location: index.php');
 }
-
-include('inclus/entete.php');
 
 // Pour des raisons de sécurité, dans le cas de l'envoi d'un mail, je teste si la page
 // courante n'a pas été usurpée; je suis donc, das ce cas, obligé de l'écrire EN DUR :
@@ -15,7 +14,7 @@ include('inclus/entete.php');
 define("PAGE_EN_COURS", "prepaOrdonnance.php");
 
 // Si le formulaire vient d'être validé, et avant de savoir si on va envoyer le mail, on "nettoie" les champs :
-if( isset($_POST['bouton']) ){
+if( isset($_POST['valider']) ){
 
 	// Civilité
 
@@ -35,12 +34,10 @@ if( isset($_POST['bouton']) ){
 
 	// Mail
 
-	// "nettoie" la valeur utilisateur :
-	$adrMailClient = filter_var($_POST['adrMailClient'], FILTER_SANITIZE_EMAIL);
+	$adrMailClient = $_POST['adrMailClient'];
 
-	// teste la NON validité du format :
-	if( ! filter_var($adrMailClient, FILTER_VALIDATE_EMAIL) ){
-		$erreurs['adrMailClient'] = "(format incorrect)"; 
+	if( ! mailValide($adrMailClient) ){
+		$erreurs['adrMailClient'] = "(mail invalide)"; 
 	};
 
 	// Message
@@ -57,7 +54,7 @@ if( isset($_POST['bouton']) ){
 	//     quand même un retour chariot, ce qui ajoute 2 caractères ('invisibles').
 
 	if( (strlen($messageClientTxt) < NB_CAR_MIN_MESSAGE) || (strlen($messageClientTxt) > NB_CAR_MAX_MESSAGE ) ){
-		$erreurs['message'] = "(entre " . NB_CAR_MIN_MESSAGE . " et " . NB_CAR_MAX_MESSAGE . " caractères)";
+		$erreurs['message'] = "(de " . NB_CAR_MIN_MESSAGE . " à " . NB_CAR_MAX_MESSAGE . " caractères)";
 	}
 	// on se donne une version du message en format HTML (plus sympa à lire pour la pharmacie)
 	$messageClientHtml = "<b style='font-size: 16px;'>" . nl2br($messageClientTxt) . "</b>";
@@ -161,11 +158,13 @@ if( isset($_POST['bouton']) ){
 		    unlink($nomTemporaire);
 	}
 }
+
+include("inclus/enteteH.php");
 ?>
 	<main id='iMain'>
 		<section id='iOrdoPrepaOrdo' class='cSectionContour'><h2>Préparation d'ordonnance</h2>
  
-			<?php if( isset($_POST['bouton']) && !isset($erreurs)) : ?>
+			<?php if( isset($_POST['valider']) && !isset($erreurs)) : ?>
 
 				<?php
 
@@ -189,7 +188,7 @@ if( isset($_POST['bouton']) ){
 					// sauf que comme on est sur un serveur mutualisé, on ne peut pas modifier 'locale', donc ça restait en anglais !
 					//
 					// d'où l'utilisation d'une fonction à moi :
-					$date = "Semaine " . date("W") . " - " . dateFr() . " - " . heureActuelle(H);
+					$date = "Semaine " . date('W') . " - " . dateFr() . " - " . heureActuelle('H');
 
 					// ===============  IP du client  =============== //     (3 possibilités)
 
@@ -448,7 +447,7 @@ if( isset($_POST['bouton']) ){
 				<article>
 					<p id='iOrdoLienModeEmploi'>
 						<a href='#iOrdoModeEmploi'>Mode d'emploi</a>&nbsp;&nbsp;<img class='cClicIndexTaille' src='img/icones/clicIndex.png' alt=''>
-						<a href='#iOrdoFinME' class='cBraille'>fin du mode d'emploi</a>
+						<a class='cBraille'>fin du mode d'emploi</a>
 					</p>
 					<div id='iOrdoModeEmploi'>
 						<div>Il suffit de suivre ces <span>4 étapes :</span></div>
@@ -478,7 +477,8 @@ if( isset($_POST['bouton']) ){
 						Nous nous occupons de la suite !
 					</div>
 				</article>
-				<sup id='iOrdoFinME'>Veuillez renseigner tous les champs ci-dessous svp. (pièce jointe < <?= TAILLE_MAX_PJ / 1024 / 1024 ?> Mo)</sup>
+				<sup>Veuillez renseigner tous les champs ci-dessous svp.</sup>
+				<sup>(pièce jointe < <?= TAILLE_MAX_PJ / 1024 / 1024 ?> Mo)</sup>
 				<form method='POST' enctype='multipart/form-data'>
 					<div class='cChampForm'>
 						<input type='radio' id='iCiviliteMme'  name='civilite' value='Mme'  required
@@ -531,10 +531,10 @@ if( isset($_POST['bouton']) ){
 						<?php if( isset($erreurs['pieceJointe']) ) { echo "<sub>" . $erreurs['pieceJointe'] . "</sub>"; } ?>
 					</div>
 					<div class='cChampForm'>
-							<p>Apportez-nous des précisions qui vous semblent utiles sur votre traitement.
-								<br>Peut-être avez-vous déjà certains produits qu'il serait donc inutile d'ajouter à la préparation ?..</p>
 						<label for='iMessageTextarea'>Message</label>
-								<textarea rows='8' minlength='<?= NB_CAR_MIN_MESSAGE_HTM ?>' maxlength='<?= NB_CAR_MAX_MESSAGE_HTM ?>' id='iMessageTextarea' name='message' required placeholder='>'
+								<p>Apportez-nous des précisions qui vous semblent utiles sur votre traitement.
+								<br>Peut-être avez-vous déjà certains produits qu'il serait donc inutile d'ajouter à la préparation ?..</p>
+								<textarea rows='8' minlength='<?= NB_CAR_MIN_MESSAGE_HTM ?>' maxlength='<?= NB_CAR_MAX_MESSAGE_HTM ?>' id='iMessageTextarea' name='message' required placeholder='...'
 									<?php	if( isset($erreurs['message']) && $focusErreurMis == false ) {
 												echo " autofocus";
 												$focusErreurMis = true;
@@ -543,8 +543,8 @@ if( isset($_POST['bouton']) ){
 								><?= isset($messageClientTxt) ? $messageClientTxt : "" ?></textarea>
 						<?php if( isset($erreurs['message']) ) { echo "<sub>" . $erreurs['message'] . "</sub>"; } ?>
 					</div>
-					<div class='cBoutonOk'>
-						<button name='bouton'>Envoyer</button>
+					<div id='iValider'>
+						<button class='cDecoBoutonValid' name='valider'>Envoyer</button>
 					</div>
 				</form>
 			<?php endif ?>

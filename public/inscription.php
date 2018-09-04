@@ -1,13 +1,13 @@
 <?php
 
-include('inclus/entete.php');
+include('inclus/enteteP.php');
 
 // ici on est obligé d'utiliser la fonction native telle quelle, sinon elle ne peut pas jouer son rôle de "_once" :
 require_once("./inclus/initDB.php");
 
 // Si le formulaire vient d'être validé, et avant de savoir si on va
 // sauvegarder les infos en BDD, on "nettoie" les champs :
-if( isset($_POST['bouton']) ){
+if( isset($_POST['valider']) ){
 
 	// Civilité
 
@@ -27,30 +27,15 @@ if( isset($_POST['bouton']) ){
 
 	// Mail
 
-	// "nettoie" la valeur utilisateur :
-	$adrMailClient = filter_var($_POST['adrMailClient'], FILTER_SANITIZE_EMAIL);
+	$adrMailClient = $_POST['adrMailClient'];
 
-	// teste la NON validité du format :
-	if( ! filter_var($adrMailClient, FILTER_VALIDATE_EMAIL) ){
-		$erreurs['adrMailClient'] = "(format incorrect)"; 
+	if( ! mailValide($adrMailClient) ){
+		$erreurs['adrMailClient'] = "(mail invalide)";
 	}
 	else{
 		// si toutes les infos sont ok, il faudra créer un nouvel enregistrement, à la condition
 		// que le mail, qui sert d'identifiant, ne soit pas déjà présent en BDD, d'où ce petit test :
 
-		// requête pour interroger la BDD :
-
-		// au début, je faisais ça, et ça marchait très bien, tant que le nom de la table
-		// était écrit en "dur" :
-		// le pb, c'est qu'on veut stocker le nom de la table dans une constante d'un fichier de config ...
-		// mais en utilisant la même technique pour le nom de la table que pour les valeurs des champs,
-		// ie avec le bindValue, ça ajoute des guillemets autour du nom de la table ... et ça, ça ne passe pas en SQL !
-		// (mais il en faut autour des valeurs des champs)
-
-		// $requete = $dbConnex->prepare("SELECT mail FROM clients WHERE mail = :mailB");
-		// $requete->bindValue("mailB", $adrMailClient, PDO::PARAM_STR);
-
-		// d'où la solution : construire une chaîne de caractères complète, avec des guillemets là où il en faut !
 		$phraseRequete = "SELECT mail FROM " . TABLE_CLIENTS . " WHERE mail = '" . $adrMailClient . "'";
 		$requete = $dbConnex->prepare($phraseRequete);
 		$requete->execute();
@@ -59,23 +44,24 @@ if( isset($_POST['bouton']) ){
 
 	// Mot de passe :
 
-	$password = $_POST['password'];
-		if( (strlen($password) < NB_CAR_MIN_MDP) || (strlen($password) > NB_CAR_MAX_MDP ) ){
-		$erreurs['password'] = "(entre " . NB_CAR_MIN_MDP . " et " . NB_CAR_MAX_MDP . " caractères)";
+	if( ! mdpValide($_POST['password']) ){
+		$erreurs['password'] = "(de " . NB_CAR_MIN_MDP . " à " . NB_CAR_MAX_MDP . " car. dont 1 Maj., 1 min. et 1 chiffre)";
 	}
-	$passwordCrypte = password_hash($password, PASSWORD_DEFAULT);
+	$passwordCrypte = password_hash($_POST['password'], PASSWORD_DEFAULT);
 }
+
+include("inclus/enteteH.php");
 ?>
 	<main id='iMain'>
 		<section id='iInscription' class='cSectionContour'><h2>Création de votre compte</h2>
 
-		<?php if( isset($_POST['bouton']) && !isset($erreurs) && !$mailExisteDeja ) : ?>
+		<?php if( isset($_POST['valider']) && !isset($erreurs) && !$mailExisteDeja ) : ?>
 
 			<?php
 			//    le formulaire a été rempli  ET  il n'y a pas d'erreurs  ET  le mail n'existait pas encore en BDD
 
-			// en plus des données du formulaire, on stocke la date de création :
-			$dateCrea = date("d/m/Y - H\:i\:s");
+			// la date de création sera insérée automatiquement lors de la création de l'enregistrement
+			// avec comme valeur 'CURRENT_TIMESTAMP'
 
 			// requête pour créer un nouvel enregistrement :
 
@@ -86,20 +72,16 @@ if( isset($_POST['bouton']) ){
 			// ie avec le bindValue, ça ajoute des guillemets autour du nom de la table ... et ça, ça ne passe pas en SQL !
 			// (mais il en faut autour des valeurs des champs)
 
-			// $requete = $dbConnex->prepare("INSERT INTO clients (dateCreation, civilite, nom, prenom, mail, password) VALUES (:dateB, :civiliteB, :nomB, :prenomB, :mailB, :passwordB)");
-			// $requete->bindValue("dateB", $dateCrea, PDO::PARAM_STR);
+			// $requete = $dbConnex->prepare("INSERT INTO clients (civilite, nom, prenom, mail, pwd) VALUES (:civiliteB, :nomB, :prenomB, :mailB, :passwordB)");
 			// $requete->bindValue("civiliteB", $civilite, PDO::PARAM_STR);
-			// $requete->bindValue("nomB", $nom, PDO::PARAM_STR);
-			// $requete->bindValue("prenomB", $prenom, PDO::PARAM_STR);
-			// $requete->bindValue("mailB", $adrMailClient, PDO::PARAM_STR);
+			// ...
 			// $requete->bindValue("passwordB", $passwordCrypte, PDO::PARAM_STR);
 
 			// d'où la solution : construire une chaîne de caractères complète, avec des guillemets là où il en faut !
 			// (avant je délimitais les ch. de car. de la requête par des " et les variables par des ' mais
 			//  j'ai dû inverser le jour où j'ai décidé d'accepter le car. ' dans les noms : ex. Mc Kulloc'h )
 			$phraseRequete = 'INSERT INTO ' . TABLE_CLIENTS .
-							 ' (dateCreation, civilite, nom, prenom, mail, password) VALUES ("' .
-							 $dateCrea . '", "' .
+							 ' (civilite, nom, prenom, mail, pwd) VALUES ("' .
 							 $civilite . '", "' .
 							 $nom . '", "' .
 							 $prenom . '", "' .
@@ -108,13 +90,12 @@ if( isset($_POST['bouton']) ){
 			$requete = $dbConnex->prepare($phraseRequete);
 			$requete->execute();
 
-			$nouvelId = $dbConnex->lastInsertId();
 			echo "<div class='cMessageConfirmation'>";
 				// NB: pour le braille, on positionne le focus (merci HTML5 !) comme ça ils n'ont pas à relire tout le début de la page pour accéder au message de confirmation.
 			echo "<p id='iFocus'>Merci, votre compte a bien été créé.</p>";
 			echo "<p>Vous pouvez dorénavant vous connecter ...</p>";
-			echo "<a href='connexion.php'>>  connexion  <</a>";
 			echo "</div>";
+			echo "<a href='connexion.php'>>  connexion  <</a>";
 
 			?>
 
@@ -161,7 +142,7 @@ if( isset($_POST['bouton']) ){
 										$focusErreurMis = true;
 									}
 							?>
-						>
+						placeholder='...'>
 					<?php if( isset($erreurs['prenom']) ) { echo "<sub>" . $erreurs['prenom'] . "</sub>"; } ?>
 				</div>
 				<div class='cChampForm'>
@@ -172,7 +153,7 @@ if( isset($_POST['bouton']) ){
 										$focusErreurMis = true;
 									}
 							?>
-						>
+						placeholder='...'>
 					<?php if( isset($erreurs['nom']) ) { echo "<sub>" . $erreurs['nom'] . "</sub>"; } ?>
 				</div>
 				<div class='cChampForm'>
@@ -183,7 +164,7 @@ if( isset($_POST['bouton']) ){
 										$focusErreurMis = true;
 									}
 							?>
-						>
+						placeholder='...'>
 					<?php if( isset($erreurs['adrMailClient']) ) { echo "<sub>" . $erreurs['adrMailClient'] . "</sub>"; } ?>
 					<?php if( $mailExisteDeja ) { echo "<sub>Aïe, cet identifiant est déjà pris, veuillez en choisir un autre svp ...</sub>"; } ?>
 				</div>
@@ -195,11 +176,11 @@ if( isset($_POST['bouton']) ){
 										$focusErreurMis = true;
 									}
 							?>
-						>
+						placeholder='...'>
 					<?php if( isset($erreurs['password']) ) { echo "<sub>" . $erreurs['password'] . "</sub>"; } ?>
 				</div>
-				<div class='cBoutonOk'>
-					<button name='bouton'>Valider</button>
+				<div id='iValider'>
+					<button class='cDecoBoutonValid' name='valider'>Valider</button>
 				</div>
 			</form>
 		</section>

@@ -1,47 +1,84 @@
 <?php
 
-include('inclus/entete.php');
+include('inclus/enteteP.php');
 
-// ici on est obligé d'utiliser la fonction native telle quelle, sinon elle ne peut pas jouer son rôle de "_once" :
 require_once("./inclus/initDB.php");
 
 $erreur = "";
 
-if( isset( $_POST['connexion'] ) ) {
+if( isset($_POST['connexion']) && !empty($_POST['mail']) ){
 
-	$mail = $_POST['mail'];
-	$password = $_POST['password'];
+	if( mailValide($_POST['mail']) ){ $mail = $_POST['mail']; }
+	else{ $mail = ''; }
 
-	// récupération du mot de passe crypté :
-	$phraseRequete = "SELECT * FROM " . TABLE_CLIENTS . " WHERE mail = '" . $mail . "'";
-	$requete = $dbConnex->prepare($phraseRequete);
-	$requete->execute();
-	$client = $requete->fetch();
+	if( !empty($_POST['password']) ){
 
-	if($client){
-		if( password_verify($password, $client['password']) ){
+		if( mdpValide($_POST['password']) ){ $password = $_POST['password']; }
+		else{ $password = ''; }
 
-			// c'est le bon mot de passe, on ouvre la session :
-			$_SESSION['client']['civilite'] = $client['civilite'];
-			$_SESSION['client']['nom'] = $client['nom'];
-			$_SESSION['client']['prenom'] = $client['prenom'];
-			$_SESSION['client']['mail'] = $client['mail'];
+		// récupération des données du client, dont le mot de passe crypté :
+		$phraseRequete = "SELECT * FROM " . TABLE_CLIENTS . " WHERE mail = '" . $mail . "'";
+		$requete = $dbConnex->prepare($phraseRequete);
+		$requete->execute();
+		$client = $requete->fetch();
 
-			// on retourne à l'accueil :
-			// A noter : ici, la fonction header fonctionne bien parce qu'on est bien au dessus
-			//           du DOCTYPE et que la page HTML n'a pas encore commencé à être chargée.
-			header("Location: index.php");
+		if( ! empty($client) ){
+
+			if( password_verify($password, $client['pwd']) ){
+
+
+				// c'est le bon mot de passe, on peut donc ouvrir la session, mais juste avant,
+				// on supprime toute trace d'une éventuelle procédure 'mot de passe oublié' qui
+				// aurait pu être en cours, cf reinitMdp.php
+				// - la variable de session
+				// - le champ 'rst' en BDD (on l'intègre à l'autre requête ci-dessous)
+				unset($_SESSION['tmp']['mail']);
+
+				// maintenant j'ouvre la session !
+				$_SESSION['client']['civilite'] = $client['civilite'];
+				$_SESSION['client']['nom'] = $client['nom'];
+				$_SESSION['client']['prenom'] = $client['prenom'];
+				$_SESSION['client']['mail'] = $client['mail'];
+				$_SESSION['client']['tel'] = $client['tel'];
+
+				// juste avant de retourner à l'accueil, on stocke en BDD la date de cette connexion
+				// => c'est la 1ère étape pour respecter la déclaration à la CNIL sur la durée de stockage des données
+				//    (la 2e étape consiste à détruire ces données quand elles ont dateConx + 1 an, cf tâches 'cron')
+				$erreurRequete = false;
+				$phraseRequete = "UPDATE ". TABLE_CLIENTS . " SET rst='', dateConx= '" . date('Y-m-d H-i-s') .  "' WHERE id= " . $client['id'];
+				$requete = $dbConnex->prepare($phraseRequete);
+				if( $requete->execute() != true ){ $erreurRequete = true; }
+				//pour l'instant je ne fais, ni n'affiche rien, en cas d'erreur BDD ...
+
+				// et en plus, si jamais le client avait, lors d'une session précédente, demandé un code
+				// d'authentification pour modifier ses données (mon-compte), sans s'en être servi => on initialise
+				// les variables de SESSION concernées, et on réinitialise aussi les valeurs restées intactes en BDD
+				$_SESSION['client']['nbEssaisCodeRestants'] = 0;
+				$_SESSION['client']['codeDateV']            = 0;
+				$_SESSION['client']['mAutor']               = false;
+				$phraseRequete = "UPDATE " . TABLE_CLIENTS . " SET codeModif='&#&##&#&', codeDateV='0' WHERE id =" . $client['id'];
+				$requete = $dbConnex->prepare($phraseRequete);
+				if( $requete->execute() != true ){ $erreurRequete = true; }
+				//pour l'instant je ne fais, ni n'affiche rien, en cas d'erreur BDD ...
+
+				// enfin, on retourne à l'accueil :
+				// A noter : ici, la fonction header fonctionne bien parce qu'on est bien au dessus
+				//           du DOCTYPE et que la page HTML n'a pas encore commencé à être chargée.
+				header('Location: index.php');
+			}
+			else{
+				$erreur = "Mot de passe invalide ...";
+			}
 		}
 		else{
-			// c'est le mauvais mot de passe
-			$erreur = "Aïe, erreur de connexion ...";
+			$erreur = "Identifiant inconnu ...";
 		}
 	}
-	else{
-		// client inconnu
-		$erreur = "Oups, erreur de connexion ...";
-	}
+	// else : "il faut renseigner un MdP ..."
 }
+// else : "il faut renseigner un mail ..."
+
+include('inclus/enteteH.php');
 ?>
 	<main id='iMain'>
 		<section id='iConnexionIDs' class='cSectionContour'>
@@ -58,24 +95,25 @@ if( isset( $_POST['connexion'] ) ) {
 			<form method='POST'>
 				<div class='cChampForm'>
 					<label for='iMail'>mail</label>
-					<input type='text' id='iMail' name='mail' required autofocus>
+					<input type='text' id='iMail' name='mail' required placeholder='...' autofocus value='<?= isset($mail) ? $mail : "" ?>' >
 				</div>
 
 				<div class='cChampForm'>
 					<label for='idPassword'>mot de passe</label>
-					<input type='password' id='idPassword' name='password' required>
+					<input type='password' id='idPassword' name='password' required placeholder='...'>
 				</div>
 
-				<div class='cBoutonOk'>
-					<button name='connexion'>Connexion</button>
+				<div id='iValider'>
+					<button class='cDecoBoutonValid' name='connexion'>Connexion</button>
+					<a href='reinitMdp.php<?= !empty($mail) ? "?mail=".$mail : "" ?>' class='cDecoBoutonAutre' >mot de passe oublié</a>
 				</div>
 			</form>
 		</section>
 
 		<section id='iConnexionInscription'  class='cSectionContour'><h2>(*) Création d'un compte</h2>
-			<p>Si vous ne disposez pas encore d'identifiants, vous pouvez vous inscrire en suivant le lien : </p>
-			<p>(La CNIL protège vos données, cf mentions légales ci-dessous)</p>
+			<p>Si vous ne disposez pas encore d'identifiants, vous pourrez les définir en suivant le lien ci-dessous : </p>
 			<p><a href='inscription.php'>>  inscription  <</a></p>
+			<p>Conformément à sa déclaration auprès de la CNIL, dont vous trouverez les coordonnées dans les mentions légales ci-dessous, votre pharmacie s'est engagée à respecter et protéger vos données personnelles. Après la création de votre compte, et dès votre première connexion, l'accès à vos données, leur modification et leur suppression sont possibles en cliquant sur votre nom dans le bandeau de connexion.</p>
 		</section>
 	</main>
 

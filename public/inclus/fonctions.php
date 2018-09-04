@@ -79,7 +79,7 @@ function require_onceCLR( $nomDuFichier ){
 //							Quelques variables globales
 //
 //		destinées aux 2 fonctions de remplacement de caractères ci-dessous
-//		(  filtrerPrenom() et filtrerNom()  )
+//		filtrerPrenom() et filtrerNom()
 //
 // - la 1ère utilise    str_replace()
 //
@@ -157,7 +157,7 @@ function filtrerPrenom( $prenomPOST ){
 
 	// test de la contrainte sur la longueur de la chaîne :
 	if( ($nbCar < NB_CAR_MIN) || ($nbCar > NB_CAR_MAX) ){
-		$erreur = "(entre " . NB_CAR_MIN . " et " . NB_CAR_MAX . " caractères)";
+		$erreur = "(de " . NB_CAR_MIN . " à " . NB_CAR_MAX . " caractères)";
 	}
 	else{
 		// cf explications sur le remplacement de car. ci-dessus :
@@ -168,8 +168,8 @@ function filtrerPrenom( $prenomPOST ){
 		// en majuscule, les autres en minuscules :
 		$prenom = ucwords(strtolower($prenom), "- \t");
 		// on informe l'utilisateur en cas de modif de sa saisie :
-		if( $prenom != $prenomPOST ){
-			$erreur = "(orthographe modifiée => veuillez revalider)";
+		if( strlen($prenom) != $nbCar ){
+			$erreur = "(orthographe modifiée => veuillez revalider svp)";
 		}
 	}
 	return [$prenom, $erreur];
@@ -198,18 +198,130 @@ function filtrerNom( $nomPOST ){
 	$nom = strip_tags($nomPOST);
 
 	if( ($nbCar < NB_CAR_MIN) || ($nbCar > NB_CAR_MAX) ){
-		$erreur = "(entre " . NB_CAR_MIN . " et " . NB_CAR_MAX . " caractères)";
+		$erreur = "(de " . NB_CAR_MIN . " à " . NB_CAR_MAX . " caractères)";
 	}
 	else{
 		$nom = str_replace($trouverCar, $nouveauCar, $nom);
 		$nom = superTrim($nom);
 		$nom = strtoupper($nom);
 		$nom = strtr($nom, $minusAccMajus);
-		if( $nom != $nomPOST ){
-			$erreur = "(orthographe modifiée => veuillez revalider)";
+		if( strlen($nom) != $nbCar ){
+			$erreur = "(orthographe modifiée => veuillez revalider svp)";
 		}
 	}
 	return [$nom, $erreur];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+//						mailValide(), telValide(), mdpValide()
+//
+// Fonctions qui servent à tester un mail, un tel, un mot de passe saisis par l'utilisateur.
+//
+// Les fonctions renvoient true ou false
+// 
+///////////////////////////////////////////////////////////////////////////////////////////////
+function mailValide( $mailSaisi ){
+
+	$resultat = false;
+
+	// 1- on le "nettoie" (des scripts malveillants par ex.)
+	$mail = filter_var($mailSaisi, FILTER_SANITIZE_EMAIL);
+
+	// 2- on teste la validité du format :
+	$mail = filter_var($mail, FILTER_VALIDATE_EMAIL);
+
+	// NB : la fonction filter_var() retourne la donnée filtrée ou 'false' si le filtre a échoué.
+
+	// 3- donc on vérifie juste que la valeur saisie est identique à la valeur filtrée
+	//    avant de répondre 'true'
+	if( ! empty($mailSaisi) && $mail == $mailSaisi ){
+		$resultat = true;
+	}
+	return $resultat;
+}
+
+function telValide( $telSaisi ){
+
+	// on autorise :
+	// - soit une chaîne vide
+	// - soit une chaîne de la forme '0x xx xx xx xx' avec ou sans espaces
+
+	$resultat = false;
+
+	if( empty($telSaisi) ){
+		$resultat = true;
+	}
+	elseif( preg_match('#^(0[1-9]{1}\s?)([0-9]{2}\s?){3}([0-9]{2})$#', $telSaisi) ){
+		$resultat = true;
+	}
+	return $resultat;
+}
+
+function mdpValide( $mdpSaisi ){
+
+	// Le mdp doit vérifier les conditions suivantes :
+	// - de  NB_CAR_MIN_MDP  à  NB_CAR_MAX_MDP  caractères
+	// - au moins 1 Maj, 1 min, 1 chiffre
+
+	$resultat = false;
+
+	// Idéalement, la regex aurait été celle-là :
+	// #^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{NB_CAR_MIN_MDP,NB_CAR_MAX_MDP}$#
+	// mais je ne sais pas comment intégrer des constantes dans la regex ...
+
+	$nbCar = strlen($mdpSaisi);
+	if( $nbCar >= NB_CAR_MIN_MDP && $nbCar <= NB_CAR_MAX_MDP ){
+		if( preg_match('#^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$#', $mdpSaisi) ){
+			$resultat = true;
+		}
+	}
+	return $resultat;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+//						genCode()
+//
+// Cette fonction génère un code aléatoire contenant :
+// chiffre(s), lettre(s) min, lettre(s) MAJ et caractères spéciaux
+// DONT AU MOINS 1 chiffre, 1 min, 1 MAJ et 1 car. spécial
+//
+// Le paramètre d'entrée sert à déterminer le nombre de caractères constituant le code.
+// (mais les caractéristiques du code imposent un minimum de 4 caractères)
+//
+// 
+///////////////////////////////////////////////////////////////////////////////////////////////
+function genCode( $nbCarCode ){
+
+	if( $nbCarCode < 4){ $nbCarCode = 4; }
+
+    $carMaj = ['Z', 'Y', 'X', 'W', 'V', 'U', 'T', 'S', 'R', 'Q', 'P', 'O', 'N', 'M', 'L', 'K', 'J', 'I', 'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'];
+    $carNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+    $carMin = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+    $carSpe = ['!', '#', '{', '@', '[', '&', '(', '-', ')', '+', ']', '/', '}', '*', '~', '=', '$', '%', '?', '^'];
+    // NB: je me suis limité aux car. spéciaux codés en UTF-8 sur 1 seul octet, car sinon la fonction str_shuffle() ne fonctionne pas bien :
+    //     => elle remplace les caractères sur 2 octets (ex. '§' ou 'µ' ...) par '��'
+
+    // NB: j'ai aussi supprimé les caractères spéciaux '<' et '>' parce qu'ils pouvaient perturber la fonction strip_tags
+    //     qui croyait parfois détecter de vraies balises HTML ou JS; ceci a été constaté dans la procédure
+    //     'mot de passe oublié' au moment du test du code (généré ici même !) reçu de l'utilisateur ...
+
+    $car = array_merge($carMaj, $carNum, $carMin, $carSpe);
+
+    $codeAlea  = $carNum[mt_rand(0, sizeof($carNum)-1)];  //
+    $codeAlea .= $carMin[mt_rand(0, sizeof($carMin)-1)];  //      AU MOINS 1 chiffre, 1 min, 1 MAJ, 1 car. spé.
+    $codeAlea .= $carMaj[mt_rand(0, sizeof($carMaj)-1)];  //
+    $codeAlea .= $carSpe[mt_rand(0, sizeof($carSpe)-1)];  //
+
+    for( $i=0; $i < ($nbCarCode - 4); $i++ ){
+
+        $codeAlea .= $car[mt_rand(0, sizeof($car)-1)];
+    }
+
+    $codeAlea = str_shuffle($codeAlea); // surtout pour mélanger les 4 1ers car., sinon le schéma est trop prévisible ^^
+
+    return $codeAlea;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,7 +375,7 @@ function testCaptcha( $user_response ){
     $result = curl_exec($ch);
     curl_close($ch);
 
-print_r(json_decode($result, true));
+	print_r(json_decode($result, true));
 
     return json_decode($result, true);
 }
@@ -497,8 +609,8 @@ function pageCourante( $request_uri ){
 	// on extrait le nom de la page courante :
 	$page = ltrim($request_uri, '/');
 
-	// on enlève l'extension '.php' :
-	$page = rtrim($page, 'hp.');
+	// on enlève l'extension '.php' et tout ce qui suit (ex. '?mc=code' ...)
+	$page = stristr($page, '.php', true);
 
 	// on initialise la chaîne de la page courante à 4 x '0' en respectant
 	// l'ordre suivant : Index / Horaires / Equipe / Contact :
@@ -566,14 +678,12 @@ function pageCourante( $request_uri ){
 			break;
 
 		case "connexion":
-			$nomPage   = NOM_CONNEX;
-			$titrePage = TTL_CONNEX;
-			break;
-
 		case "inscription":
-			$nomPage   = NOM_INSCRIP;
-			$titrePage = TTL_INSCRIP;
-			break;
+		case "mon-compte":
+        case "reinitMdp":
+            $nomPage   = NOM_INDEX;
+            $titrePage = TTL_INDEX;
+            break;
 
 		default :
 			$flagPC    = "1000";         // si ce n'est aucun des cas précédents, ou si la page '/index.php'
@@ -617,24 +727,24 @@ function pageCourante( $request_uri ){
 ///////////////////////////////////////////////////////////////////////////////////////////////
 function enteteSpecs( $request_uri ){
 
-// on extrait le nom de la page courante :
-$page = ltrim($request_uri, '/');
+	// on extrait le nom de la page courante :
+	$page = ltrim($request_uri, '/');
 
-// on enlève l'extension '.php' :
-$page = rtrim($page, 'hp.');
+	// on enlève l'extension '.php' et tout ce qui suit (ex. '?mc=code' ...)
+	$page = stristr($page, '.php', true);
 
-$description = "";
-$robots      = BOTS_DEFT;
-$refresh     = "";                        // initialisations
-$focus       = "";
-$cdn         = "";
+	$description = "";
+	$robots      = BOTS_DEFAULT;
+	$refresh     = "";                        // initialisations
+	$focus       = "";
+	$cdn         = "";
 
-// NB: pour les pages horaires, contact, inscription, prepaOrdo et prepaComm, idéalement,
-// j'aurais voulu écrire les lignes d'instructions HTML complètes entre guillemets "",
-// pour les récupérer dans la page appelante en sortie de la fonction, ex. $enteteSpecs['refresh'] ...
-// MAIS !.. quand je mets le '<' de début de balise, ça doit être interprété comme une faille potentielle,
-// et rien ne passe, la chaîne transférée par la fonction est vide.
-// => d'où l'ajout du '<' uniquement après l'appel de la fonction dans entete.php :-(
+	// NB: pour les pages horaires, contact, inscription, prepaOrdo et prepaComm, idéalement,
+	// j'aurais voulu écrire les lignes d'instructions HTML complètes entre guillemets "",
+	// pour les récupérer dans la page appelante en sortie de la fonction, ex. $enteteSpecs['refresh'] ...
+	// MAIS !.. quand je mets le '<' de début de balise, ça doit être interprété comme une faille potentielle,
+	// et rien ne passe, la chaîne transférée par la fonction est vide.
+	// => d'où l'ajout du '<' uniquement après l'appel de la fonction dans enteteH.php :-(
 
 	switch( $page ){
 
@@ -688,13 +798,21 @@ $cdn         = "";
 			break;
 
 		case "connexion":
-			$robots      = BOTS_CONNEX;
+			$robots      = BOTS_NO;
 			break;
 
 		case "inscription":
-			$robots      = BOTS_INSCRIP;
+			$robots      = BOTS_NO;
 			$focus       = " onload='placerFocus(\"iFocus\")'";
 			break;
+
+		case "mon-compte":
+			$robots      = BOTS_NO;
+			break;
+
+        case "reinitMdp":
+            $robots      = BOTS_NO;
+            break;
 
 		default :                        // si ce n'est aucun des cas précédents, ou si la page '/index.php'
 			$description = DESC_INDEX;   // n'est pas précisée dans l'URL => on est sur la page index !
@@ -858,5 +976,58 @@ function racClavier( $http_user_agent ){
 
 	return ['phrase' => $phrase, 'combi' => $combi];
 }
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+//							mailTxHt( $expeNom, $expeMailHbg, $expeMailReply,
+//									  $destiMail,
+//									  $objet,
+//									  $messageTxt, $messageHtml )
+//
+// Fonction qui envoie un mail contenant 2 parties textuelles :
+// - la 1ère partie au format TXT brut
+// - la 2ème partie au format HTML
+//
+// La fonction renvoie 'true' si le mail est bien parti.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+function mailTxHt( $expeNom, $expeMailHbg, $expeMailReply, $destiMail, $objet, $messageTxt, $messageHtml ){
+
+	$rc = "\r\n";
+	$boundary = md5(rand());
+	$separateur = $rc . "--" . $boundary . $rc;
+
+	$header =	"From: " . $expeNom . " <" . $expeMailHbg . "> " . $rc .
+				"Reply-To: " . $expeMailReply . $rc .
+				"MIME-Version: 1.0" . $rc .
+				"Content-Type: multipart/alternative; boundary=" . $boundary;
+
+	$objet = mb_encode_mimeheader($objet, "UTF-8", "B"); // pour que les car. accentués passent bien
+
+	$date = date('d/m/Y - H:i:s');
+
+	// message en version "TEXT" ...
+	$message =	$separateur . 
+				"Content-Type: text/plain; charset=\"UTF-8\"" . $rc .
+				"Content-Transfer-Encoding: 8bit" . $rc .
+				$date . $rc . $rc .
+				$messageTxt;
+
+	// ... et son alternative, message en version "HTML"
+	// NB : Attention : on le concatène avec le message précédent
+	$message .=	$separateur .
+				"Content-Type: text/html; charset=\"UTF-8\"" . $rc .
+				"Content-Transfer-Encoding: 8bit" . $rc .
+				nl2br($date . $rc . $rc .
+				$messageHtml);
+
+	// envoi du mail :
+	$envoi = mail( $destiMail, $objet, $message, $header );
+	return $envoi;
+}
+
 
 ?>

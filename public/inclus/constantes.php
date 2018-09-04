@@ -1,14 +1,22 @@
 <?php
 
-// il y a aussi des constantes dans :
+// - penser qu'il y a aussi des constantes dans :
 //
-//     - tapette.php
-//     - /erreurs/erreur-....php     (401, 403, 404, 500, index)
-//     - .htaccess de la racine      => vérifier que le .htaccess du serveur est bien identique
+//       - tapette.php
+//       - /erreurs/erreur-....php     (401, 403, 404, 500, index)
+//       - .htaccess de la racine      => vérifier que le .htaccess du serveur est bien identique
 //
 // 
-// et penser à supprimer l'affichage des erreyrs dans entete.php : ini_set('display_errors', 1);
+// - penser à supprimer l'affichage des erreurs dans enteteP.php : ini_set('display_errors', 1);
 //
+// - penser à créer les 3 tâches 'cron' sur ovh.fr :
+//                  https://www.ovh.com/manager/web/index.html#/configuration/hosting/bigouig.fr?tab=CRON
+//
+//       - ./www/cron/cronCnilPreSupp.php
+//       - ./www/cron/cronCnilSupp.php
+//       - ./www/cron/cronSuppDdee.php
+//
+
 
 
 // code de validation, pour pouvoir utiliser, grâce à un compte Google, ses outils de suivi de référencement
@@ -68,7 +76,7 @@ define('PHIE_SIRET'      , "81248009300010");
 define('PHIE_APE'        , "4773Z");
 
 // URL de la pharmacie
-define('PHIE_URLC'       , "pharmacielereste.fr");
+// cf § Infos hébergeur
 
 // Hébergeur du site
 define('PHIE_HBG_COORD'  , "OVH - 2 rue Kellermann - BP 80157 - 59053 Roubaix cedex 1");
@@ -131,6 +139,28 @@ define('USERPSWD_BDD_HBG' , "Mdp2pharmacihc");
 // nom de la table 'clients' pour cette BDD (inscription.php et connexion.php)
 define('TABLE_CLIENTS'    , "clientsVLR01");
 
+// Pour la modification des données personnelles :
+
+// nombre de caractères du code aléatoire d'authentification
+// (pair, sinon ce sera l'entier pair inférieur)
+define('NB_CAR_CODE_MODIF', 8);
+// durée de validité du code (en minutes)
+define('DUREE_VALID_CODE_MODIF', 5);
+// Nb max de tentatives de validation du code
+define('NB_MAX_ESSAIS_CODE', 3);
+
+// En cas de procédure 'Mot de passe oublié' => nb de car. du code généré aléatoirement
+define('NB_CAR_CODE_ALEA', 10);
+
+// Durée de conservation maximale des données personnelles, définie lors de la déclaration CNIL
+define('DUREE_MAX_DONNEES_PERSO', 365);
+
+// Délai avant suppression automatique (cron) d'un compte inactif (en jours)
+define('DELAI_AV_SUPPR', 30);
+
+// Délai entre la demande de suppression de son compte par l'utilisateur, et la suppression effective (en jours)
+define('DELAI_AP_DDE_SUPPR', 30);
+
 //////////////////////////////////////////////////////////////////////////////////////////
 ///////////////                                                            ///////////////
 ///////////////                     Infos hébergeur                        ///////////////
@@ -145,10 +175,11 @@ define('HOME'             , "/home/pharmacihc/"); // utilisé uniquement dans re
 define('ADR_EXP_HBG'      , "pharmacihc@cluster021.hosting.ovh.net");
 
 // nom explicite pour l'expéditeur des mails : (possible avec accents !)
-define('LABEL_EXP'        , "Site pharmacie");
-define('LABEL_EXP_PIRATE' , "Site pharmacie - Attention");
+define('LABEL_EXP'        , "pharmacielereste.fr");
+define('LABEL_EXP_PIRATE' , "pharmacielereste.fr - Attention");
 
 // adresse du site de la pharmacie :
+define('PHIE_URLC'                 , "pharmacielereste.fr");
 define('ADRESSE_SITE_PHARMACIE'    , "http://pharmacielereste.fr/");
 define('S_ADRESSE_SITE_PHARMACIE'  , "https://pharmacielereste.fr/");
 define('W_ADRESSE_SITE_PHARMACIE'  , "http://www.pharmacielereste.fr/");
@@ -181,7 +212,7 @@ define('NB_CAR_MIN_HTM'         , 1);
 define('NB_CAR_MAX_HTM'         , 45);
 
 // Nombre de caractères min et max pour le mot de passe :
-define('NB_CAR_MIN_MDP'         , 5);
+define('NB_CAR_MIN_MDP'         , 5); // min 3 (1 Maj + 1 min + 1 chiffre) sinon le mdp sera tjs invalide
 define('NB_CAR_MAX_MDP'         , 20);
 define('NB_CAR_MIN_MDP_HTM'     , 2);
 define('NB_CAR_MAX_MDP_HTM'     , 25);
@@ -281,12 +312,11 @@ define('CONTACT_INFOS_PRATIQUES' ,
 ///////////////                + <title>                                   ///////////////
 ///////////////                + <meta name='description'>                 ///////////////
 ///////////////                                                            ///////////////
-///////////////               (fonctions.php et entete.php)                ///////////////
+///////////////               (fonctions.php et enteteP.php)               ///////////////
 ///////////////                                                            ///////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // nom et <title> : dans 'fonctions / pageCourante()'
-//     (sauf NOM_INDEX qui est aussi dans entete.php, avec son flag associé)
 //
 // <meta description> : dans 'fonctions / enteteSpecs()'
 //
@@ -341,15 +371,18 @@ define('NOM_AIDE'      , "Aide");
 define('TTL_AIDE'      , "Aide - " . NOM_PHARMA);
 define('DESC_AIDE'     , "Page dédiée à l accessibilité : synthèse sur la navigation dans le site de la pharmacie des Tilleuls : architecture, menus et raccourcis clavier.");
 
-define('NOM_CONNEX'    , "Connexion");
-define('TTL_CONNEX'    , "Connexion - " . NOM_PHARMA);
-define('BOTS_CONNEX'   , "noindex, nofollow, none");  // on ne référence pas la page connexion
+// on ne définit ni NOM, ni TTL, ni DESC pour les pages suivantes, puisqu'on ne les référence pas
+// (on leur donne par défaut ceux de index.php)
+// connexion.php
+// inscription.php
+// mon-compte.php
+// reinitMdp.php
 
-define('NOM_INSCRIP'   , "Inscription");
-define('TTL_INSCRIP'   , "Inscription - " . NOM_PHARMA);
-define('BOTS_INSCRIP'  , "noindex, nofollow, none");  // on ne référence pas la page inscription
+// instructions par défaut destinées aux robots d'indexation pour les pages du site
+define('BOTS_DEFAULT'  , "index, follow, all"); // pour bigouig, c'est 'no ...', mais pour les autres sites c'est : "index, follow, all"
 
-define('BOTS_DEFT'     , "index, follow, all");  // ou   "noindex, nofollow, none"   par défaut, pour les pages du site
+// pour les pages qu'on ne veut pas référencer
+define('BOTS_NO'       , "noindex, nofollow, none");
 
 define('MC_NOM_PHARMA' , "Le Reste");
 define('MC_QUARTIER'   , "Saint-Joseph de Porterie");

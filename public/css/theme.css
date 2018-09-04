@@ -43,10 +43,17 @@
 /* pharma fermée                                   (accueil)            :  ~FF4141  rgb(255, 65, 65)    rouge      */
 /* pharma ferme dans ...                           (accueil)                                                       */
 /*                                                                                                                 */
+/* form des données perso en readonly, fond        (mon-compte)         :           rgb(224, 224, 224)  gris       */
+/* form des données perso en readonly, texte       (mon-compte)         :           rgb(89, 89, 89)     gris       */
+/*                                                                                                                 */
 /* messages d'erreur formulaires       (prepaComm + prepaOrdo + contact):  ~FF0000  rgb(255, 0, 0)      rouge      */
 /*  + n'oubliez pas ...                            (prepaOrdo)                                                     */
 /*                                                                                                                 */
-/* bouton de validation, fond                                           :  ~7B6A57  rgb(123, 106, 87)   marron     */
+/* boutons de validation, texte                                         :           white                          */
+/*  + boutons 'autres', fond                                                                                       */
+/*                                                                                                                 */
+/* boutons de validation, fond + bordure                                :  ~7B6A57  rgb(123, 106, 87)   mauve      */
+/*  + boutons 'autres', texte + bordure                                                                            */
 /*  + tous les liens 'normaux' du site                                                                             */
 /*      - tel + mail                               (contact)                                                       */
 /*      - inscription                              (connexion)                                                     */
@@ -116,20 +123,20 @@ main{
 /*********************************                    tous les liens 'normaux' du site                **********************************/
 /*********************************      pages connexion, inscription, contact, prepaOrdo, menleg      **********************************/
 /***************************************************************************************************************************************/
-#iConnexionInscription a, #iInscription a, #iContactTel a, #iContactMail a, #iOrdoLienModeEmploi a, #iMentionsLegales a{
+#iConnexionInscription a, #iInscription a, #iContactTel a, #iContactMail a, #iOrdoLienModeEmploi a, #iMenLeg a{
     color: rgb(123, 106, 87);
     text-decoration: underline;
 }
 /* hover des liens précédents */
-#iConnexionInscription a:hover, #iInscription a:hover, #iContactTel a:hover, #iContactMail a:hover, #iOrdoLienModeEmploi a:hover, #iMentionsLegales a:hover{
+#iConnexionInscription a:hover, #iInscription a:hover, #iContactTel a:hover, #iContactMail a:hover, #iOrdoLienModeEmploi a:hover, #iMenLeg a:hover{
     color: rgb(242, 146, 0);
     font-weight: 700;
     text-decoration: none;   /* ça permet de mieux marquer la différence (accessibilité) */
 }
 
 /***************************************************************************************************************************************/
-/***********************************                           5 formulaires                         ***********************************/
-/***********************************     contact, connexion, inscription, ordonnance et commande     ***********************************/
+/******************************                                6 formulaires                              ******************************/
+/******************************    contact, connexion, inscription, ordonnance, commande et mon-compte    ******************************/
 /***************************************************************************************************************************************/
 #iContactCoordonnees:before, #iContactPlan:before, #iContactFormulaire:before, #iConnexionInscription:before{
     background-color: rgb(149, 26, 128); /* petit trait horizontal entre les § */
@@ -145,13 +152,27 @@ main{
 sub{
     color: rgb(255, 0, 0); /* mess. d'erreurs */
 }
-.cBoutonOk button{
-    background-color: rgb(123, 106, 87); /* déco du bouton de validation */
-    color: white;
+/* déco des boutons (validation, annulation, ...) */
+.cDecoBoutonValid, .cDecoBoutonAutre{
     font-weight: 400;
+    border: 0.1rem solid rgb(123, 106, 87);
 }
-.cBoutonOk button:hover{
+.cDecoBoutonValid{
+    background-color: rgb(123, 106, 87);
+    color: white;
+}
+.cDecoBoutonAutre{
+    background-color: white;
+    color: rgb(123, 106, 87);
+}
+.cDecoBoutonValid:hover, .cDecoBoutonAutre:hover{
     background-color: rgb(242, 146, 0);
+    color: white;
+    border: 0.1rem solid rgb(242, 146, 0);
+}
+/* case de saisie du code de modification des données, reçu par mail */
+#iMCValiderCode input{
+    border: 0.1rem solid rgb(123, 106, 87);
 }
 
 /***************************************************************************************************************************************/
@@ -186,8 +207,11 @@ nav#iNavigation a{
     background-color: rgb(173, 173, 173); /* bandeau de connexion */
     color: black; /* nom de la personne connectée */
 }
-#iLienConnex a{
+#iLienConnex a, #iClientConnecte a{
     color: black; /* connexion / déconnexion */
+}
+#iClientConnecte a:hover{
+    font-weight: 700;
 }
 
 /***************************************************************************************************************************************/
@@ -313,6 +337,20 @@ nav#iNavigation a{
 }
 
 /***************************************************************************************************************************************/
+/**************************************************         page mon-compte         ****************************************************/
+/***************************************************************************************************************************************/
+/* on grise le fond du formulaire sur les données personnelles tant que le code n'a pas été validé  */
+#iMCDonneesPerso form.cReadOnly, #iMCDonneesPerso input[readonly]{
+    background-color: rgb(224, 224, 224);
+    color: rgb(89, 89, 89);
+}
+/* on grise le fond de la <div>, contenant la phrase sur la demande de suppression, uniquement pour créer  */
+/* un contraste autour de la case à cocher qui, selon les navigateurs mobiles, peut être quasi invisible ! */
+form#iMCSupprimCpte div:first-of-type{
+    background-color: rgb(224, 224, 224);
+}
+
+/***************************************************************************************************************************************/
 /************************************************        page mentions légales        **************************************************/
 /***************************************************************************************************************************************/
 #iMenLeg h3{
@@ -321,7 +359,6 @@ nav#iNavigation a{
 #iMenLeg .gauche{
     font-weight: 700;          /* mots de la colonne de gauche */
 }
-
 
 /***************************************************************************************************************************************/
 /****************************************************             Footer            ****************************************************/
