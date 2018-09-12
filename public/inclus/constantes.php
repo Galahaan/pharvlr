@@ -141,7 +141,8 @@ define('TABLE_CLIENTS'    , "clientsVLR01");
 
 // Pour la modification des données personnelles :
 
-// nombre de caractères du code aléatoire d'authentification
+// nombre de caractères du code de validation généré aléatoirement
+// pour pouvoir modifier ou supprimer ses données
 // (pair, sinon ce sera l'entier pair inférieur)
 define('NB_CAR_CODE_MODIF', 8);
 // durée de validité du code (en minutes)
@@ -201,7 +202,7 @@ define('LISTE_EXT_AUTORISEES'      , "'.jpe, .jpg, .jpeg, .png, .gif, .pdf'");
 ///////////////                                                            ///////////////
 ///////////////       Nb caractères min et max dans les formulaires        ///////////////
 ///////////////                                                            ///////////////
-///////////////      (pages prepaOrdonnance, prepaCommande et contact)     ///////////////
+///////////////        (pages ordonnance-  commande-  et  contact)         ///////////////
 ///////////////                                                            ///////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 

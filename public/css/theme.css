@@ -26,18 +26,18 @@
 /*                                                                                                                 */
 /* fond de la zone du site                         (main)               :  white                                   */
 /*                                                                                                                 */
-/* textes dans le bandeau du haut (titres + tel)                        :  ~951A80  rgb(149, 26, 128)   mauve      */
+/* texte dans le bandeau du haut (titres + tel)                         :  ~951A80  rgb(149, 26, 128)   mauve      */
 /*  + lignes fines dans les formulaires                                                                            */
 /*  + lignes gammes de produits                                                                                    */
 /*                                                                                                                 */
 /* menu de navigation, fond                                             :  ~ADADAD  rgb(173, 173, 173)  gris       */
-/* menu de navigation, textes                                           :  white                                   */
+/* menu de navigation, texte                                            :  white                                   */
 /*                                                                                                                 */
 /* bandeau de connexion, fond                                           :  ~ADADAD  rgb(173, 173, 173)  gris       */
-/* bandeau de connexion, textes                                         :  black                                   */
+/* bandeau de connexion, texte                                          :  black                                   */
 /*                                                                                                                 */
 /* vignettes accueil, fond                         (accueil)            :  ~94C11D  rgb(148, 193, 29)   vert       */
-/* vignettes accueil, textes                       (accueil)            :  white                                   */
+/* vignettes accueil, texte                        (accueil)            :  white                                   */
 /* pharma ouverte                                  (accueil)            :  ~4DBC1C  rgb(77, 188, 28)    vert       */
 /* pharma ouvre dans ...                           (accueil)                                                       */
 /* pharma fermée                                   (accueil)            :  ~FF4141  rgb(255, 65, 65)    rouge      */
@@ -46,19 +46,19 @@
 /* form des données perso en readonly, fond        (mon-compte)         :           rgb(224, 224, 224)  gris       */
 /* form des données perso en readonly, texte       (mon-compte)         :           rgb(89, 89, 89)     gris       */
 /*                                                                                                                 */
-/* messages d'erreur formulaires       (prepaComm + prepaOrdo + contact):  ~FF0000  rgb(255, 0, 0)      rouge      */
-/*  + n'oubliez pas ...                            (prepaOrdo)                                                     */
+/* messages d'erreur formulaires             (comm-  ordo-  contact)    :  ~FF0000  rgb(255, 0, 0)      rouge      */
+/*  + n'oubliez pas ...                             (ordo-)                                                        */
 /*                                                                                                                 */
 /* boutons de validation, texte                                         :           white                          */
 /*  + boutons 'autres', fond                                                                                       */
 /*                                                                                                                 */
-/* boutons de validation, fond + bordure                                :  ~7B6A57  rgb(123, 106, 87)   mauve      */
+/* boutons de validation, fond + bordure                                :  ~7B6A57  rgb(123, 106, 87)   marron     */
 /*  + boutons 'autres', texte + bordure                                                                            */
 /*  + tous les liens 'normaux' du site                                                                             */
 /*      - tel + mail                               (contact)                                                       */
 /*      - inscription                              (connexion)                                                     */
 /*      - connexion                                (inscription)                                                   */
-/*      - mode d'emploi                            (prepaOrdo)                                                     */
+/*      - mode d'emploi                            (ordo-)                                                         */
 /*      - organismes partenaires                   (menleg)                                                        */
 /* bouton de validation, hover                                          :  ~F29200  rgb(242, 146, 0)    orange     */
 /*  + hover sur tous les liens 'normaux' du site                                                                   */
@@ -69,8 +69,8 @@
 /* créneaux ouverture, fond                        (horaires)           :  rgba(148, 193, 29, .2)       vert       */
 /* créneau actuel ouverture, fond                  (horaires)           :  rgba(148, 193, 29, .5)       vert       */
 /*                                                                                                                 */
-/* ordo en ligne, mode emploi, fond                (prepaOrdo)          :  ~5B5B5B  rgb(91, 91, 91)     gris       */
-/* ordo en ligne, mode emploi, Nota Bene           (prepaOrdo)          :  ~F29200  rgb(242, 146, 0)    orange     */
+/* ordo en ligne, mode emploi, fond                (ordo-)              :  ~5B5B5B  rgb(91, 91, 91)     gris       */
+/* ordo en ligne, mode emploi, Nota Bene           (ordo-)              :  ~F29200  rgb(242, 146, 0)    orange     */
 /*                                                                                                                 */
 /* § alternés                                                                                                      */
 /*      - 1 produit sur 2                          (gammesProduits)     :  ~F8F8F8  rgb(248, 248, 248)  gris       */
@@ -121,7 +121,7 @@ main{
 
 /***************************************************************************************************************************************/
 /*********************************                    tous les liens 'normaux' du site                **********************************/
-/*********************************      pages connexion, inscription, contact, prepaOrdo, menleg      **********************************/
+/*********************************        pages connexion, inscription, contact, ordo-, menleg        **********************************/
 /***************************************************************************************************************************************/
 #iConnexionInscription a, #iInscription a, #iContactTel a, #iContactMail a, #iOrdoLienModeEmploi a, #iMenLeg a{
     color: rgb(123, 106, 87);
@@ -138,7 +138,7 @@ main{
 /******************************                                6 formulaires                              ******************************/
 /******************************    contact, connexion, inscription, ordonnance, commande et mon-compte    ******************************/
 /***************************************************************************************************************************************/
-#iContactCoordonnees:before, #iContactPlan:before, #iContactFormulaire:before, #iConnexionInscription:before{
+#iContactCoordonnees::before, #iContactPlan::before, #iContactFormulaire::before, #iConnexionInscription::before, #iMenLegOP article::after{
     background-color: rgb(149, 26, 128); /* petit trait horizontal entre les § */
 }
 .cChampForm{
@@ -304,7 +304,7 @@ nav#iNavigation a{
 }
 
 /***************************************************************************************************************************************/
-/**************************************                  page prepaOrdonnance                     **************************************/
+/**************************************                    page ordonnance-                       **************************************/
 /***************************************************************************************************************************************/
 .cCouleurRouge{
     color: rgb(255, 0, 0); /* N'oubliez pas l'original de l'ordonnance ... */
