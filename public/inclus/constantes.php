@@ -47,7 +47,8 @@ define('FAX_PHARMA_DECO'   , "02 40 30 06 56");
 define('ADR_MAIL_PHARMA'   , "contact@pharmacielereste.fr");
 define('ADR_FB_PHARMA'     , "https://www.facebook.com/Pharmacie-Le-Reste-700447003388902");
 define('ADR_GG_PHARMA'     , "https://plus.google.com/113407799173132476603/about");
-define('IFRAME_GOOGLE_MAPS', "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2707.373186940024!2d-1.5181840484881897!3d47.26795897906138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4805efcc685c613b%3A0x3d51712e6204b39f!2sPharmacie+Le+Reste!5e0!3m2!1sfr!2sfr!4v1537269010148");
+define('IFRAME_MAPS_PHARMA', "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2707.373186940024!2d-1.5181840484881897!3d47.26795897906138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4805efcc685c613b%3A0x3d51712e6204b39f!2sPharmacie+Le+Reste!5e0!3m2!1sfr!2sfr!4v1537269010148");
+define('IFRAME_MAPS_POLICE', "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d10837.767497334356!2d-1.551572!3d47.227502!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x18995709d53782b2!2sCommissariat+de+Police+Central+de+Nantes!5e0!3m2!1sfr!2sfr!4v1537271241099");
 
 //////////////////////////////////////////////////////////////////////////////////////////
 ///////////////                                                            ///////////////

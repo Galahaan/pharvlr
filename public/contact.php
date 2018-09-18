@@ -96,7 +96,7 @@ include('inclus/enteteH.php');
 			<p>- cliquez sur le plan ci-dessous</p>
 			<p>- puis sur l'icône &nbsp;<img src='img/icones/itineraire.png' alt='itinéraire'></p>
 			<p>... et laissez-vous guider.</p>
-			<iframe src=<?= IFRAME_GOOGLE_MAPS ?> width='600' height='450' title='nouvelle page google map' allowfullscreen></iframe>
+			<iframe src=<?= IFRAME_MAPS_PHARMA ?> width='600' height='450' title='nouvelle page google map' allowfullscreen></iframe>
 		</section>
 
 		<section id='iContactFormulaire' class='cSectionContour'><h2>Envoyer un message ...</h2>
