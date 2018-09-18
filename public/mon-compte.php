@@ -193,8 +193,8 @@ if( isset($_POST['validerModifs']) || isset($_POST['annulerModifs']) ){
         //pour l'instant je ne fais, ni n'affiche rien, en cas d'erreur BDD ...
 
         // et pour ré-afficher les bonnes données (ie celles actuellement valides) :
-        $_POST['mail'] = $_SESSION['client']['mail'];
-        $_POST['tel']  = $_SESSION['client']['tel'];
+        $_POST['mail']       = $_SESSION['client']['mail'];
+        $_POST['telMobile']  = $_SESSION['client']['telMobile'];
     }
     else{
         // on a cliqué sur 'valider'.
@@ -226,15 +226,22 @@ if( isset($_POST['validerModifs']) || isset($_POST['annulerModifs']) ){
             // ********************************************       N° TEL       *********************************************
 
             // Si le n° de tel est différent => on modifie l'info en BDD, mais aussi, en cas de réussite, la globale SESSION
-            if( $_POST['tel'] != $_SESSION['client']['tel'] ){
+            if( $_POST['telMobile'] != $_SESSION['client']['telMobile'] ){
 
                 // le n° est bien différent du précédent, mais, juste avant de le stocker, on vérifie qu'il est valide
-                if( telValide($_POST['tel']) ){
-                    $phraseRequete = "UPDATE " . TABLE_CLIENTS . " SET tel='" . $_POST['tel'] . "' WHERE id =" . $id;
+                if( telValide($_POST['telMobile']) ){
+
+                    $telMobile = formaterTel($_POST['telMobile']); // un espace entre chaque paire
+
+                    // pour présenter à l'utilisateur le n° sous sa forme 'propre' (ie avec un espace entre chaque paire) :
+                    $_POST['telMobile'] = $telMobile;
+
+                    // stockage en BDD
+                    $phraseRequete = "UPDATE " . TABLE_CLIENTS . " SET telMobile='" . $telMobile . "' WHERE id =" . $id;
                     $requete = $dbConnex->prepare($phraseRequete);
                     if( $requete->execute() == true ){
                         $modifOK[] = "n° de téléphone";
-                        $_SESSION['client']['tel'] = $_POST['tel'];
+                        $_SESSION['client']['telMobile'] = $_POST['telMobile'];
                     }
                     else{
                         $erreursBDD[] = "n° de téléphone";
@@ -529,10 +536,9 @@ include("inclus/enteteH.php");
             </div>
 
             <div class='cChampForm'>
-                <label for='iTel'>Téléphone</label>
-                <input type='text' id='iTel' name='tel' value='<?= isset($_POST['tel']) ? $_POST['tel'] : $_SESSION['client']['tel'] ?>'
+                <label for='iTelMobile'>Téléphone</label>
+                <input type='text' id='iTelMobile' name='telMobile' value='<?= !empty($_POST['telMobile']) ? $_POST['telMobile'] : $_SESSION['client']['telMobile'] ?>'
                                     placeholder='-- -- -- -- --' <?= ($_SESSION['client']['mAutor'] != true) ? "readonly" : "" ?> >
-                <?php // le jour où le tel sera obligatoire, il faudra remplacer value = isset par !empty               ?>
             </div>
 
             <div class='cChampForm'>

@@ -214,6 +214,28 @@ function filtrerNom( $nomPOST ){
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
+//                      formaterTel()
+//
+// Fonction qui sert à formater un n° de tel à 10 chiffres selon le schéma : 0x xx xx xx xx
+//
+// Elle prend en entrée une variable comportant 10 chiffres et 0 ou x espaces.
+//
+// Elle renvoie en sortie le tel formaté par paires
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+function formaterTel( $telPOST ){
+
+    $tel = str_replace(' ', '', $telPOST);          // on enlève les espaces
+    $tel = preg_replace('#(\d{2})#', '$1 ', $tel);  // on remet 1 espace entre chaque paire
+
+    // autre façon de faire : (je n'ai pas testé la plus rapide)
+    // $tel = str_replace("\r\n", " ", chunk_split($tel, 2));
+
+    return $tel;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
 //						mailValide(), telValide(), mdpValide()
 //
 // Fonctions qui servent à tester un mail, un tel, un mot de passe saisis par l'utilisateur.
@@ -244,16 +266,11 @@ function mailValide( $mailSaisi ){
 
 function telValide( $telSaisi ){
 
-	// on autorise :
-	// - soit une chaîne vide
-	// - soit une chaîne de la forme '0x xx xx xx xx' avec ou sans espaces
+	// on autorise une chaîne de la forme '0 x x x x x x x x x' avec ou sans espaces
 
 	$resultat = false;
 
-	if( empty($telSaisi) ){
-		$resultat = true;
-	}
-	elseif( preg_match('#^(0[1-9]{1}\s?)([0-9]{2}\s?){3}([0-9]{2})$#', $telSaisi) ){
+    if( preg_match('#^(0\s?)([1-9]{1}\s?)([0-9]{1}\s?){7}([0-9]{1})$#', $telSaisi) ){
 		$resultat = true;
 	}
 	return $resultat;
