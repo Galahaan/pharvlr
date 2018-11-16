@@ -44,7 +44,9 @@ define('VIL_PHARMA'        , "Nantes");
 define('TEL_PHARMA_DECO'   , "02 40 25 15 80");
 define('TEL_PHARMA_UTIL'   , "+33240251580");
 define('FAX_PHARMA_DECO'   , "02 40 30 06 56");
+define('AFF_MAIL_PHARMA'   , "non"); // 'oui' affiche ADR_MAIL_PHARMA, sinon c'est NON_MAIL_PHARMA
 define('ADR_MAIL_PHARMA'   , "contact@pharmacielereste.fr");
+define('NON_MAIL_PHARMA'   , "mail : cf formulaire ci-dessous");
 define('ADR_FB_PHARMA'     , "https://www.facebook.com/Pharmacie-Le-Reste-700447003388902");
 define('ADR_GG_PHARMA'     , "https://plus.google.com/113407799173132476603/about");
 define('IFRAME_MAPS_PHARMA', "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2707.373186940024!2d-1.5181840484881897!3d47.26795897906138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4805efcc685c613b%3A0x3d51712e6204b39f!2sPharmacie+Le+Reste!5e0!3m2!1sfr!2sfr!4v1537269010148");
@@ -173,7 +175,7 @@ define('DELAI_AP_DDE_SUPPR', 30);
 // 'home' du site sur le serveur de l'hébergeur (fonctions.php)
 define('HOME'             , "/home/pharmacihc/"); // utilisé uniquement dans require_onceCLR qui n'est utilisée nulle part !
 
-// pour l'envoi de mails : pages prepaOrdonnance, prepaCommande et contact
+// pour l'envoi de mails : pages ordonnance-, commande- et contact
 // adresse de l'expéditeur des mails via l'hébergeur du site :
 define('ADR_EXP_HBG'      , "pharmacihc@cluster021.hosting.ovh.net");
 
@@ -197,7 +199,7 @@ define('MAIL_DEST_CLR'             , "clr.tstph@use.startmail.com");
 // taille max de la pièce jointe : 5 Mo = 5242880 octets
 define('TAILLE_MAX_PJ'             , 5242880);
 
-// extensions autorisées pour la pièce jointe : cf aussi ligne : " switch ($extension) " en ligne ~ 180 de prepaCommande
+// extensions autorisées pour la pièce jointe : cf aussi ligne : " switch ($extension) " en ligne ~ 180 de commande-
 define('LISTE_EXT_AUTORISEES'      , "'.jpe, .jpg, .jpeg, .png, .gif, .pdf'");
 
 //////////////////////////////////////////////////////////////////////////////////////////
