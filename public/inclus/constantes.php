@@ -329,8 +329,8 @@ define('CONTACT_INFOS_PRATIQUES' ,
 //             pour la <meta description :     nb car. max =  160
 
 define('NOM_INDEX'     , "Accueil");
-define('TTL_INDEX'     , "Pharmacie Le Reste à Saint-Joseph de Porterie, Nantes");
-define('DESC_INDEX'    , "La pharmacie Le Reste située à Saint-Joseph de Porterie sur la commune de Nantes vous fournit conseils et médicaments, commande et ordonnance en ligne, matériel");
+define('TTL_INDEX'     , "Pharmacie Le Reste à Saint Joseph de Porterie, Nantes");
+define('DESC_INDEX'    , "La pharmacie Le Reste de Saint Joseph, plus précisément Saint-Joseph de Porterie, sise à Nantes vous fournit médicaments, conseils et services en ligne");
 
 define('NOM_HORAIRES'  , "Horaires");
 define('TTL_HORAIRES'  , "Horaires de la pharmacie Le Reste à Saint-Joseph de Porterie");
